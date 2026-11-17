@@ -1,0 +1,7 @@
+{
+  "name": "tatame",
+  "private": true,
+  "description": "O método de alimentação da família Gracie para quem treina jiu-jitsu.",
+  "scripts": { "montar": "node montar.js", "verificar": "node montar.js --verificar", "test": "node --test" },
+  "engines": { "node": ">=20" }
+}

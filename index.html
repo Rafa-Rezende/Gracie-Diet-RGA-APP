@@ -1,0 +1,688 @@
+<title>Tatame</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: uma coluna de telemóvel (máx. 560 px) sobre a lona do tatame; abas em baixo. Cores dos grupos do método. */
+:root{
+  --bg:#F3F1EB; --surface:#FFFFFF; --surface-2:#F7F5F0; --line:#E3DFD5;
+  --ink:#15171C; --muted:#5F636D; --faint:#9A9DA5;
+  --accent:#1D4E9E; --accent-ink:#FFFFFF; --accent-soft:#E3EBF8;
+  --ok:#23845A; --ok-soft:#E0F2E8; --bad:#C23B3B; --bad-soft:#FBE4E2; --warn:#B4690E; --warn-soft:#FCEFD9;
+  --g-A:#2F8F5B; --g-B:#C08412; --g-C:#C2477A; --g-D:#D9662B; --g-E:#A99A12; --g-F:#2E7DBF; --g-coalhado:#7A5AB8; --g-neutro:#8A8F99; --g-evitar:#C23B3B; --g-nunca:#8E1F1F; --g-x:#9A9DA5;
+  --f-display:"Barlow Condensed",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --shadow:0 1px 2px rgba(21,23,28,.05),0 6px 18px rgba(21,23,28,.05);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121317; --surface:#1B1D23; --surface-2:#22252C; --line:#2E323B;
+  --ink:#ECEDF0; --muted:#A4A8B2; --faint:#6C717C;
+  --accent:#7FA6EA; --accent-ink:#0F1726; --accent-soft:#1F2A40;
+  --ok:#5CCB93; --ok-soft:#173326; --bad:#F07C7C; --bad-soft:#3A1E1E; --warn:#F0AE57; --warn-soft:#3A2B17;
+  --g-A:#5CC28A; --g-B:#E2AE45; --g-C:#EA7AAA; --g-D:#F29460; --g-E:#D6C845; --g-F:#68AEE8; --g-coalhado:#A98BE6; --g-neutro:#9EA3AD; --g-evitar:#F07C7C; --g-nunca:#E35A5A; --g-x:#6C717C;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121317; --surface:#1B1D23; --surface-2:#22252C; --line:#2E323B;
+  --ink:#ECEDF0; --muted:#A4A8B2; --faint:#6C717C;
+  --accent:#7FA6EA; --accent-ink:#0F1726; --accent-soft:#1F2A40;
+  --ok:#5CCB93; --ok-soft:#173326; --bad:#F07C7C; --bad-soft:#3A1E1E; --warn:#F0AE57; --warn-soft:#3A2B17;
+  --g-A:#5CC28A; --g-B:#E2AE45; --g-C:#EA7AAA; --g-D:#F29460; --g-E:#D6C845; --g-F:#68AEE8; --g-coalhado:#A98BE6; --g-neutro:#9EA3AD; --g-evitar:#F07C7C; --g-nunca:#E35A5A; --g-x:#6C717C;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;margin:0;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+[hidden]{display:none!important}
+.num{font-variant-numeric:tabular-nums}
+h1,h2,h3{margin:0;font-family:var(--f-display);letter-spacing:.01em;text-wrap:balance}
+
+main{max-width:560px;margin:0 auto;padding-block:20px calc(96px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+.top .eyebrow{font-size:13px;color:var(--muted)}
+.top h1{font-size:34px;font-weight:800;line-height:1;margin-top:4px;text-transform:uppercase}
+.top p{margin:6px 0 0;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);min-width:0}
+.card h2{font-size:21px;font-weight:700;text-transform:uppercase}
+.card-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+.note{font-size:13px;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 14px;font-weight:600;font-size:14px;min-height:44px;text-decoration:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--accent);padding-inline:6px}
+.btn.danger{color:var(--bad);border-color:var(--bad-soft)}
+.btn.armed{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.full{width:100%}
+
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.info{background:var(--accent-soft);color:var(--accent)}
+
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:7px 12px;font-size:14px;min-height:36px}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--c,var(--g-x));flex:none}
+.chip.on{background:color-mix(in srgb,var(--c) 16%,var(--surface));border-color:var(--c)}
+.chip .x{margin-left:2px;color:var(--faint);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+
+.meal{display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px}
+.meal .hora{font-family:var(--f-display);font-size:26px;font-weight:700;line-height:1}
+.meal .tipo{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.meal h3{font-size:19px;text-transform:uppercase}
+.meal .ideia{font-size:13px;color:var(--muted);margin:2px 0 8px}
+.prob{margin:8px 0 0;padding-left:18px;color:var(--bad);font-size:13px}
+.sep{text-align:center;font-size:12px;color:var(--faint);margin:-4px 0}
+
+.verdict{border-radius:14px;padding:14px;display:flex;gap:12px;align-items:flex-start}
+.verdict.ok{background:var(--ok-soft)} .verdict.bad{background:var(--bad-soft)} .verdict.vazio{background:var(--surface-2)}
+.verdict b{display:block;font-family:var(--f-display);font-size:22px;text-transform:uppercase;line-height:1.1}
+.verdict.ok b{color:var(--ok)} .verdict.bad b{color:var(--bad)}
+.verdict ul{margin:6px 0 0;padding-left:18px}
+
+.grupo-cat{margin-top:12px}
+.grupo-cat h3{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-family:var(--f-body);font-weight:700;margin-bottom:6px}
+
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label,.flabel{font-size:12px;color:var(--muted);font-weight:600}
+.field input,.field select{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:10px 12px;width:100%;min-width:0;font-size:16px;min-height:44px}
+.fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fgrid .full{grid-column:1/-1}
+.seg{display:flex;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:8px 6px;font-weight:600;font-size:14px;color:var(--muted);min-height:38px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.days{display:flex;gap:6px;flex-wrap:wrap}
+.days button{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;min-width:44px;min-height:40px;font-weight:600;font-size:13px;color:var(--muted)}
+.days button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+
+.big{font-family:var(--f-display);font-size:44px;font-weight:800;line-height:1}
+.big small{font-size:18px;color:var(--muted);font-weight:600}
+.estado{border-radius:14px;padding:14px}
+.estado.dentro,.estado.confortavel{background:var(--ok-soft)} .estado.exigente{background:var(--warn-soft)} .estado.arriscado,.estado.passou{background:var(--bad-soft)}
+.estado b{font-family:var(--f-display);font-size:22px;text-transform:uppercase}
+.spark svg{width:100%;height:auto;display:block}
+.spark text{fill:var(--muted);font-size:10px;font-family:var(--f-body)}
+table.grupos{width:100%;border-collapse:collapse;font-size:14px}
+table.grupos td{padding:10px 6px;border-top:1px solid var(--line);vertical-align:top}
+table.grupos td:first-child{width:28px}
+.gdot{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--c);color:#fff;font-weight:800;font-size:13px}
+
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--faint);text-decoration:none;padding:6px 0;min-height:48px}
+.tabs a svg{width:22px;height:22px}
+.tabs a[aria-current="page"]{color:var(--accent)}
+
+.sheet-bg{position:fixed;inset:0;background:rgba(10,12,16,.5);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:min(560px,100%);max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-16px;background:var(--bg);padding-block:4px}
+.sheet-h h2{font-size:22px;text-transform:uppercase}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;z-index:60;max-width:calc(100% - 32px)}
+.logo{width:40px;height:40px;border-radius:11px;flex:none}
+.hero{display:flex;gap:12px;align-items:center}
+</style>
+<main id="main" aria-live="polite"></main>
+<nav class="tabs" id="tabs" aria-label="Secções"></nav>
+<div id="sheet-root"></div>
+<div class="toast" id="toast" hidden></div>
+<script>
+/* Tatame: as regras do método Gracie de alimentação. Função pura, sem ecrã nem dados guardados.
+
+Fonte: Rorion Gracie, "The Gracie Diet" (Gracie Publications, 2010; ISBN 978-1-4507-8785-7): tabela de grupos de
+Carlos Gracie (pp. 31-34) e "Tips and Reminders" (pp. 46-48). Portado do mycros (macros/gracie.py), com os mesmos testes.
+- A: legumes, carne, peixe, marisco, ovos, gorduras, frutos oleaginosos. Juntam-se entre si e com UM amido (B).
+- B: amidos. Nunca dois diferentes na mesma refeição (massa com pão sim: ambos trigo; arroz com feijão não).
+- C: fruta doce, queijo fresco, mel, açúcar. Entre si e com um B sem gordura. A com C nunca.
+- D: fruta ácida. Sozinha, nem com outra ácida; no máximo 2 vezes por semana.
+- E: banana crua. Com fruta doce, queijo fresco e leite; nunca com A, B, mel, açúcar ou fruta seca.
+- F: leite. Com amidos, banana, gema, manteiga e queijo; nunca com A nem fruta. Iogurte e kefir, sozinhos.
+- Neutros: gema, água de coco, levedura, café, chás. Fora: porco, álcool; a evitar: doces, refrigerantes, vinagre, pimenta.
+- 3 refeições por dia, pelo menos 4 h 30 entre elas, só água ou água de coco pelo meio.
+As justificações do livro (fermentação, pH do sangue) não têm suporte científico: o app segue o método, não promete saúde.
+*/
+(function (raiz) {
+"use strict";
+const FRASES = [["fruto vermelho", "D"], ["frutos vermelho", "D"], ["agua de coco", "neutro"], ["levedura de cerveja", "neutro"], ["fiambre de peru", "A"], ["fiambre de frango", "A"], ["feijao verde", "A"], ["milho doce", "A"], ["farinha de milho", "B"], ["tortilha de milho", "B"], ["ervilha seca", "B"], ["soja seca", "B"], ["batata doce", "B"], ["bolacha de arroz", "B"], ["tortita de arroz", "B"], ["banana seca", "C"], ["banana assada", "C"], ["banana cozida", "C"], ["banana frita", "A"], ["maca verde", "D"], ["uva acida", "D"], ["pera acida", "D"], ["ameixa acida", "D"], ["tomate acido", "D"], ["ameixa seca", "C"], ["coco ralado", "A"], ["coco seco", "A"], ["leite de coco", "A"], ["leite de amendoa", "A"], ["manteiga de amendoim", "A"], ["queijo derretido", "A"], ["queijo gratinado", "A"], ["queijo creme", "C"], ["proteina em po", "F"], ["sumo de pacote", "evitar"], ["pao de lo", "evitar"], ["castanha de caju", "A"], ["castanha do para", "A"], ["castanha do brasil", "A"]];
+const NUNCA = new Set(["alcool", "bacon", "cerveja", "chourico", "enchido", "entremeada", "espumante", "febra", "fiambre", "gin", "licor", "linguica", "mortadela", "porco", "presunto", "rum", "salpicao", "salsicha", "sangria", "toucinho", "vinho", "vodka", "whisky"]);
+const NUNCA_SEMPRE = new Set(["alcool", "bacon", "cerveja", "chourico", "entremeada", "espumante", "febra", "gin", "licor", "mortadela", "porco", "presunto", "rum", "salpicao", "sangria", "toucinho", "vinho", "vodka", "whisky"]);
+const EVITAR = new Set(["biscoito", "bolacha", "bolo", "calda", "canela", "chocolate", "cola", "compota", "cravinho", "croissant", "donut", "gelado", "ketchup", "maionese", "marmelada", "mostarda", "nectar", "nutella", "pastel", "pickle", "pimenta", "refrigerante", "vinagre"]);
+const COALHADO = new Set(["coalhada", "iogurte", "kefir", "skyr"]);
+const F = new Set(["leite", "nata", "proteina", "whey"]);
+const E = new Set(["banana"]);
+const NEUTRO = new Set(["agua", "cafe", "cha", "gema", "infusao"]);
+const AMIDOS = {"pao": "trigo", "tosta": "trigo", "torrada": "trigo", "massa": "trigo", "esparguete": "trigo", "macarrao": "trigo", "lasanha": "trigo", "cuscuz": "trigo", "bulgur": "trigo", "wrap": "trigo", "tortilha": "trigo", "bagel": "trigo", "panqueca": "trigo", "noodle": "trigo", "gnocchi": "trigo", "seitan": "trigo", "trigo": "trigo", "farinha": "trigo", "crepe": "trigo", "arroz": "arroz", "batata": "batata", "aveia": "aveia", "floco": "aveia", "cereal": "cereais", "granola": "cereais", "muesli": "cereais", "feijao": "feijão", "grao": "grão", "lentilha": "lentilhas", "broa": "milho", "pipoca": "milho", "tapioca": "mandioca", "mandioca": "mandioca", "inhame": "inhame", "cevada": "cevada", "centeio": "centeio", "castanha": "castanha", "quinoa": "quinoa"};
+const FAMILIA_FRASE = {"farinha de milho": "milho", "tortilha de milho": "milho", "ervilha seca": "ervilha", "soja seca": "soja", "batata doce": "batata-doce", "bolacha de arroz": "arroz", "tortita de arroz": "arroz"};
+const A = new Set(["aba", "abacate", "abobora", "agriao", "aipo", "alcachofra", "alface", "alho", "ameijoa", "amendoa", "amendoim", "atum", "avela", "azeite", "azeitona", "bacalhau", "beringela", "beterraba", "bife", "borrego", "brocolo", "cabrito", "cacau", "caju", "camarao", "caranguejo", "carne", "cebola", "cenoura", "chia", "choco", "clara", "coelho", "coentro", "cogumelo", "couve", "curgete", "dourada", "edamame", "endivia", "ervilha", "espargo", "espinafre", "frango", "gamba", "gengibre", "germen", "gordura", "hamburguer", "lagosta", "legume", "linhaca", "louro", "lula", "manjericao", "manteiga", "margarina", "marisco", "mexilhao", "milho", "nabo", "novilho", "noz", "oleo", "oregao", "ostra", "ova", "ovo", "palmito", "pato", "peixe", "pepino", "peru", "pescada", "picanha", "pimento", "pinhao", "pistacho", "pizza", "polvo", "quiabo", "rabanete", "robalo", "rucula", "salada", "salmao", "salsa", "sapateira", "sardinha", "semente", "sesamo", "sopa", "tomate", "vaca", "vitela"]);
+const C = new Set(["acai", "acucar", "ameixa", "anona", "cana", "coco", "cottage", "diospiro", "figo", "goiaba", "jaca", "lichia", "maca", "mamao", "mel", "melancia", "melao", "meloa", "papaia", "passa", "pera", "queijo", "requeijao", "ricota", "tamara", "uva"]);
+const D = new Set(["amora", "anana", "cereja", "damasco", "framboesa", "groselha", "kiwi", "laranja", "lima", "limao", "manga", "maracuja", "marmelo", "mirtilo", "morango", "nectarina", "pessego", "roma", "tangerina", "toranja"]);
+const QUEIJOS_C = new Set(["cottage", "queijo", "requeijao", "ricota"]);
+const SUB_ACIDAS = new Set(["ameixa", "anona", "goiaba", "maca", "uva"]);
+const SECOS_DOCES = new Set(["passa", "seca", "seco", "tamara"]);
+// plurais que o corte do "s" final não resolve (nozes → noze, cereais → cereai)
+A.add("noze"); AMIDOS.cereai = "cereais";
+const B = new Set(Object.keys(AMIDOS));
+// ordem de decisão do livro: "requeijão de vaca" é queijo (C) antes de ser carne (A)
+const ORDEM = [["nunca", NUNCA], ["evitar", EVITAR], ["coalhado", COALHADO], ["F", F], ["E", E], ["neutro", NEUTRO],
+  ["B", B], ["C", QUEIJOS_C], ["A", A], ["C", C], ["D", D]];
+
+const GRUPOS = [{"grupo": "A", "nome": "Cozinhados", "regra": "Juntam-se entre si e com um só amido. Nunca com o grupo C.", "exemplos": "Frango, carne, peixe, marisco, ovos, legumes, verduras, azeite, manteiga, abacate, frutos secos, queijo derretido"}, {"grupo": "B", "nome": "Amidos", "regra": "Um só por refeição: arroz com feijão não; massa com pão sim (ambos trigo).", "exemplos": "Arroz, massa, pão, batata, batata-doce, aveia, cereais, feijão, grão, lentilhas, quinoa, castanhas"}, {"grupo": "C", "nome": "Doces", "regra": "Entre si e com um amido sem gordura. Nunca com o grupo A.", "exemplos": "Melão, melancia, papaia, maçã vermelha, pera, uvas, figos, tâmaras, passas, mel, queijo fresco, requeijão"}, {"grupo": "D", "nome": "Fruta ácida", "regra": "Sozinha, nem com outra ácida. No máximo 2 vezes por semana, de manhã.", "exemplos": "Laranja, tangerina, kiwi, ananás, morango, frutos vermelhos, manga, pêssego, maçã verde, limão"}, {"grupo": "E", "nome": "Banana crua", "regra": "Com fruta doce, queijo fresco ou leite. Nunca com amidos nem com o grupo A.", "exemplos": "Banana (cozida, assada ou seca passa a doce, grupo C)"}, {"grupo": "F", "nome": "Leite", "regra": "Com amidos, banana e queijo. Nunca com carne, legumes ou fruta. Iogurte e kefir, sozinhos.", "exemplos": "Leite, natas, whey e proteína em pó; à parte: iogurte, kefir, coalhada"}, {"grupo": "neutro", "nome": "Neutros", "regra": "Com tudo.", "exemplos": "Gema de ovo, água de coco, café, chás, levedura de cerveja"}, {"grupo": "nunca", "nome": "Fora", "regra": "Porco nunca. Álcool, doces e refrigerantes não fazem parte da dieta.", "exemplos": "Porco, fiambre, chouriço, bacon, álcool, bolos, chocolate, gelados, refrigerantes, vinagre, pimenta, canela"}];
+
+const normalizar = s => String(s || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().match(/[a-z0-9]+/g)?.join(" ") || "";
+const raizPalavra = p => (p.length > 3 && p.endsWith("s") ? p.slice(0, -1) : p);
+const texto = nome => normalizar(nome).split(" ").filter(Boolean).map(raizPalavra).join(" ");
+const palavras = nome => new Set(texto(nome).split(" ").filter(Boolean));
+const cruza = (a, b) => [...a].some(x => b.has(x));
+
+/** Grupo de um alimento pelo nome: A, B, C, D, E, F, coalhado, neutro, evitar, nunca, ou null. */
+function grupo(nome) {
+  const t = ` ${texto(nome)} `;
+  const ps = palavras(nome);
+  if (cruza(ps, NUNCA_SEMPRE)) return "nunca";
+  for (const [frase, g] of FRASES) if (t.includes(` ${frase} `)) return g;
+  for (const [g, conjunto] of ORDEM) if (cruza(ps, conjunto)) return g;
+  return null;
+}
+
+/** Família do amido ("um só amido" é uma família: pão e massa são ambos trigo). */
+function familiaAmido(nome) {
+  const t = ` ${texto(nome)} `;
+  for (const [frase, f] of Object.entries(FAMILIA_FRASE)) if (t.includes(` ${frase} `)) return f;
+  for (const p of t.trim().split(" ")) if (AMIDOS[p]) return AMIDOS[p];
+  return null;
+}
+
+/** O que quebra as regras numa refeição, dada a lista de nomes dos alimentos. Vazio = segue o método. */
+function problemas(nomes) {
+  const unicos = [...new Set(nomes)];
+  const itens = unicos.map(n => ({ n, g: grupo(n), p: palavras(n) })).filter(i => i.g !== "neutro");
+  const tem = g => itens.filter(i => i.g === g).length;
+  const nomesDe = g => itens.filter(i => i.g === g).map(i => i.n.toLowerCase());
+  const frutasC = itens.filter(i => i.g === "C" && !cruza(i.p, QUEIJOS_C)).map(i => i.p);
+  const saida = [];
+  if (tem("nunca")) saida.push(`tem ${nomesDe("nunca").slice(0, 2).join(", ")} (fora da dieta)`);
+  if (tem("evitar")) saida.push(`tem ${nomesDe("evitar").slice(0, 2).join(", ")} (a evitar)`);
+  const familias = [...new Set(itens.filter(i => i.g === "B").map(i => familiaAmido(i.n) || i.n.toLowerCase()))].sort();
+  if (familias.length > 1) saida.push(`dois amidos diferentes: ${familias[0]} e ${familias[1]}`);
+  if (tem("A") && tem("C")) saida.push("cozinhados com fruta doce ou queijo fresco");
+  if (tem("C") && itens.some(i => i.g === "B" && texto(i.n).includes("frit"))) saida.push("doce com amido frito");
+  if (tem("D")) {
+    if (itens.length > tem("D")) saida.push("fruta ácida com outra comida");
+    else if (tem("D") > 1) saida.push("duas frutas ácidas juntas");
+  }
+  const doceSeco = new Set(["mel", "acucar", ...SECOS_DOCES]);
+  if (tem("E") && (tem("A") || tem("B") || frutasC.some(p => cruza(p, doceSeco)))) saida.push("banana crua com amido, cozinhados ou fruta seca");
+  if (tem("F") && (tem("A") || frutasC.length || tem("D"))) saida.push("leite com carne, legumes ou fruta");
+  if (tem("coalhado") && itens.length > tem("coalhado")) saida.push("iogurte ou kefir com outra comida");
+  const sub = new Set(); for (const i of itens) if (i.g === "C") for (const w of i.p) if (SUB_ACIDAS.has(w)) sub.add(w);
+  if (sub.size > 1) saida.push("duas frutas pouco ácidas juntas (ex.: maçã e uva)");
+  return saida;
+}
+
+// ---------------------------------------------------------------- as 3 refeições
+const INTERVALO_MIN = 270;      // 4 h 30
+const minutos = hm => { const [h, m] = hm.split(":").map(Number); return h * 60 + m; };
+const hm = m => `${String(Math.floor(((m % 1440) + 1440) % 1440 / 60)).padStart(2, "0")}:${String((((m % 1440) + 1440) % 1440) % 60).padStart(2, "0")}`;
+
+/** Erro em português se as 3 horas não respeitarem o livro; null se estão certas. */
+function horasValidas(horas) {
+  if (!Array.isArray(horas) || horas.length !== 3) return "Põe 3 horas, uma por refeição.";
+  if (!horas.every(h => /^([01]\d|2[0-3]):[0-5]\d$/.test(h))) return "Escreve as horas assim: 07:30.";
+  const m = horas.map(minutos);
+  for (let i = 1; i < 3; i++) if (m[i] - m[i - 1] < INTERVALO_MIN) return "O método pede pelo menos 4 h 30 entre refeições.";
+  return null;
+}
+
+/**
+ * Avisos das 3 refeições em volta de um treino (hora "HH:MM", duração em min).
+ * Comer em cima do treino pesa no tatame: deixa ~2 h entre a refeição e o treino
+ * (recomendação habitual para refeições grandes antes de exercício intenso).
+ */
+function avisosTreino(horas, treino, duracao = 90) {
+  if (!treino) return [];
+  const t = minutos(treino), fim = t + duracao, out = [];
+  horas.forEach((h, i) => {
+    const m = minutos(h);
+    if (m <= t && t - m < 120) out.push({ refeicao: i, texto: `Refeição às ${h} e treino às ${treino}: menos de 2 h. Come mais cedo ou mais leve.` });
+    if (m > t && m < fim) out.push({ refeicao: i, texto: `Refeição às ${h} cai durante o treino.` });
+  });
+  return out;
+}
+
+/** Sugere 3 horas com 4 h 30 entre elas: a última refeição a seguir ao treino da noite, ou o padrão 08:00, 13:00, 19:00. */
+function horasSugeridas(treino, duracao = 90) {
+  if (!treino) return ["08:00", "13:00", "19:00"];
+  const t = minutos(treino);
+  if (t >= 17 * 60) {   // treino ao fim do dia: jantar depois do treino, almoço pelo menos 2 h antes
+    const jantar = Math.min(t + duracao + 30, 23 * 60);
+    const almoco = Math.min(t - 120, jantar - INTERVALO_MIN);
+    return [hm(Math.min(almoco - INTERVALO_MIN, 9 * 60)), hm(almoco), hm(jantar)];
+  }
+  if (t <= 9 * 60) {     // treino de manhã: primeira refeição depois do treino
+    const p = t + duracao + 30;
+    return [hm(p), hm(p + INTERVALO_MIN), hm(p + 2 * INTERVALO_MIN)];
+  }
+  const antes = t - 150;  // treino a meio do dia
+  return [hm(Math.min(antes, 8 * 60)), hm(Math.max(t + duracao + 30, Math.min(antes, 8 * 60) + INTERVALO_MIN)), hm(Math.max(t + duracao + 30, Math.min(antes, 8 * 60) + INTERVALO_MIN) + INTERVALO_MIN)];
+}
+
+const REFEICOES = [{ tipo: "C", nome: "Refeição doce", ideia: "Fruta doce, queijo fresco e pão ou aveia (sem gordura)." },
+  { tipo: "A", nome: "Refeição cozinhada", ideia: "Proteína, legumes e azeite com um só amido (arroz, batata ou massa)." },
+  { tipo: "A", nome: "Refeição cozinhada", ideia: "Proteína, legumes e azeite com um só amido." }];
+
+raiz.TatameRegras = { grupo, familiaAmido, problemas, normalizar, GRUPOS, REFEICOES, horasValidas, horasSugeridas, avisosTreino, minutos, hm, INTERVALO_MIN };
+})(typeof window !== "undefined" ? window : globalThis);
+</script>
+<script>
+/* Tatame: categorias de peso de adulto da IBJJF e o plano para chegar a uma delas. Função pura.
+
+TABELA BASE, A CONFIRMAR com a tabela oficial (ibjjf.com) antes de usar a sério. Compilada de guias públicos
+(FloGrappling, Find Your Gi, SubmissionShark, BJJ Spot) que concordam nas categorias leves e divergem nas pesadas.
+- Gi: o limite inclui o kimono. No-gi: pesa-se com o equipamento de no-gi.
+- Na IBJJF a pesagem é imediatamente antes da primeira luta: não há tempo para reidratar. Por isso nada de cortes
+  de água: o peso tem de baixar com tempo, comendo.
+Ritmo seguro de perda: cerca de 0,5 a 1 % do peso por semana preserva a massa magra e o rendimento
+(Garthe et al. 2011, IJSNEM 21:97; Helms et al. 2014, JISSN 11:20).
+*/
+(function (raiz) {
+"use strict";
+
+const NOMES = ["Galo", "Pluma", "Pena", "Leve", "Médio", "Meio-pesado", "Pesado", "Super-pesado", "Pesadíssimo"];
+// limites em kg; null = sem limite
+const TABELA = {
+  gi: {
+    masculino: [57.5, 64, 70, 76, 82.3, 88.3, 94.3, 100.5, null],
+    feminino: [48.5, 53.5, 58.5, 64, 69, 74, 79.3, null],
+  },
+  nogi: {
+    masculino: [55.5, 61.5, 67.5, 73.5, 79.5, 85.5, 91.5, 97.5, null],
+    feminino: [46.5, 51.5, 56.5, 61.5, 66.5, 71.5, 76.5, null],
+  },
+};
+const FONTE = "Tabela base de guias públicos; confirmar em ibjjf.com";
+
+function categorias(modalidade, sexo) {
+  const lista = (TABELA[modalidade] || {})[sexo] || [];
+  return lista.map((limite, i) => ({ id: i, nome: NOMES[i], limite }));
+}
+
+/** Peso no dia, sem roupa, que cabe na categoria: no gi, o limite menos o kimono. */
+function limiteSemRoupa(cat, modalidade, kimono) {
+  if (cat.limite == null) return null;
+  return +(cat.limite - (modalidade === "gi" ? kimono : 0.3)).toFixed(1);
+}
+
+/** A categoria mais leve em que o peso de hoje já cabe, com 1 % de folga para o dia (água, comida). */
+function categoriaAtual(peso, modalidade, sexo, kimono = 1.8) {
+  return categorias(modalidade, sexo).find(c => c.limite == null || peso * 1.01 <= limiteSemRoupa(c, modalidade, kimono));
+}
+
+const dias = (de, ate) => Math.round((Date.UTC(...ate.split("-").map((n, i) => i === 1 ? n - 1 : +n)) - Date.UTC(...de.split("-").map((n, i) => i === 1 ? n - 1 : +n))) / 864e5);
+
+/**
+ * O plano até ao campeonato.
+ * @returns {{estado: "dentro"|"confortavel"|"exigente"|"arriscado"|"passou", porSemana, porSemanaPct, falta, semanas, limite, atual}}
+ */
+function plano({ peso, modalidade, sexo, categoria, data, hoje, kimono = 1.8 }) {
+  const cats = categorias(modalidade, sexo);
+  const cat = cats[categoria];
+  if (!cat || !peso) return null;
+  const limite = limiteSemRoupa(cat, modalidade, kimono);
+  const atual = categoriaAtual(peso, modalidade, sexo, kimono);
+  const d = data && hoje ? dias(hoje, data) : null;
+  const base = { categoria: cat, limite, atual, dias: d };
+  if (limite == null || peso <= limite) return { ...base, estado: "dentro", falta: 0, folga: limite == null ? null : +(limite - peso).toFixed(1) };
+  const falta = +(peso - limite).toFixed(1);
+  if (d == null || d <= 0) return { ...base, estado: "passou", falta };
+  const semanas = d / 7;
+  const porSemana = falta / semanas;
+  const porSemanaPct = porSemana / peso * 100;
+  const estado = porSemanaPct <= 0.7 ? "confortavel" : porSemanaPct <= 1 ? "exigente" : "arriscado";
+  return { ...base, estado, falta, semanas: +semanas.toFixed(1), porSemana: +porSemana.toFixed(2), porSemanaPct: +porSemanaPct.toFixed(2) };
+}
+
+raiz.TatameCategorias = { TABELA, NOMES, FONTE, categorias, limiteSemRoupa, categoriaAtual, plano };
+})(typeof window !== "undefined" ? window : globalThis);
+</script>
+<script>
+/* Tatame: alimentos para escolher depressa, por tipo. O grupo vem sempre das regras (TatameRegras.grupo). */
+(function (raiz) {
+"use strict";
+raiz.TatameAlimentos = [
+  ["Proteína", ["Frango", "Peru", "Carne de vaca", "Bife", "Hambúrguer de vaca", "Peixe", "Salmão", "Atum", "Bacalhau", "Pescada", "Sardinha", "Camarão", "Polvo", "Lula", "Ovos", "Claras"]],
+  ["Legumes", ["Alface", "Tomate", "Brócolos", "Espinafres", "Cenoura", "Curgete", "Abóbora", "Pepino", "Cebola", "Couve", "Cogumelos", "Pimento", "Feijão verde", "Ervilhas", "Sopa de legumes", "Salada"]],
+  ["Gorduras", ["Azeite", "Manteiga", "Abacate", "Azeitonas", "Amêndoas", "Nozes", "Amendoim", "Castanha de caju", "Manteiga de amendoim", "Coco ralado", "Sementes de chia"]],
+  ["Amidos", ["Arroz", "Massa", "Pão", "Pão integral", "Tostas", "Batata", "Batata-doce", "Aveia", "Cereais", "Granola", "Feijão", "Grão-de-bico", "Lentilhas", "Quinoa", "Tapioca", "Mandioca", "Cuscuz", "Broa de milho", "Bolacha de arroz"]],
+  ["Fruta doce e queijo fresco", ["Melão", "Melancia", "Papaia", "Pera", "Maçã vermelha", "Uvas", "Figos", "Tâmaras", "Passas", "Ameixa seca", "Banana cozida", "Queijo fresco", "Requeijão", "Ricota", "Cottage", "Mel", "Açaí"]],
+  ["Fruta ácida", ["Laranja", "Tangerina", "Kiwi", "Ananás", "Morango", "Frutos vermelhos", "Manga", "Pêssego", "Maçã verde", "Limão", "Maracujá"]],
+  ["Banana e leite", ["Banana", "Leite", "Leite meio-gordo", "Whey", "Proteína em pó", "Natas", "Iogurte", "Iogurte grego", "Kefir"]],
+  ["Neutros", ["Gema de ovo", "Água de coco", "Café", "Chá", "Levedura de cerveja"]],
+  ["Fora do método", ["Fiambre", "Bacon", "Chouriço", "Salsichas", "Bolo", "Chocolate", "Gelado", "Bolachas", "Refrigerante", "Cerveja", "Vinho", "Ketchup", "Maionese"]],
+];
+})(typeof window !== "undefined" ? window : globalThis);
+</script>
+<script>
+(function () {
+"use strict";
+const R = window.TatameRegras, K = window.TatameCategorias, CATALOGO = window.TatameAlimentos;
+
+/* ---------- utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pad = n => String(n).padStart(2, "0");
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const hoje = () => iso(new Date());
+const addDias = (s, n) => { const [y, m, d] = s.split("-").map(Number); return iso(new Date(y, m - 1, d + n)); };
+const DS = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+const fmtDia = s => { const [y, m, d] = s.split("-").map(Number); const dt = new Date(y, m - 1, d); return `${DS[dt.getDay()]}, ${d} ${MESES[m - 1]}`; };
+const kg = n => (n == null ? "—" : String(+(+n).toFixed(1)).replace(".", ","));
+const corGrupo = g => `var(--g-${g || "x"})`;
+const NOME_GRUPO = { A: "Cozinhados", B: "Amido", C: "Doce", D: "Fruta ácida", E: "Banana", F: "Leite", coalhado: "Iogurte", neutro: "Neutro", evitar: "A evitar", nunca: "Fora", null: "Não reconheço" };
+const FAIXAS = ["Branca", "Azul", "Roxa", "Castanha", "Preta"];
+const I = {
+  hoje: '<path d="M4 7h16v13H4z"/><path d="M4 11h16M9 3v4M15 3v4"/>',
+  juntar: '<circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/>',
+  competir: '<path d="M7 4h10v5a5 5 0 01-10 0z"/><path d="M12 14v4M8 20h8M17 6h3a3 3 0 01-3 3M7 6H4a3 3 0 003 3"/>',
+  metodo: '<path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h11"/>',
+  perfil: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',
+};
+const svg = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
+
+/* ---------- dados: ficam neste telemóvel ---------- */
+const CHAVE = "tatame:v1";
+let memoria = null;
+function ler() {
+  try { const t = localStorage.getItem(CHAVE); if (t) return JSON.parse(t); } catch (_) { /* sem armazenamento */ }
+  return memoria || { perfil: null, competidor: { ativo: false }, registos: {}, pesos: [] };
+}
+let D = ler();
+function gravar() { memoria = D; try { localStorage.setItem(CHAVE, JSON.stringify(D)); } catch (_) { toast("Este navegador não deixa guardar. Os dados perdem-se ao fechar."); } }
+
+let toastT;
+function toast(m) { const t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => (t.hidden = true), 2600); }
+
+/* ---------- estado do dia ---------- */
+const treinoDe = data => { const t = D.perfil && D.perfil.treino; if (!t || !t.hora) return null; const [y, m, d] = data.split("-").map(Number); return t.dias.includes(new Date(y, m - 1, d).getDay()) ? t : null; };
+const horas = () => (D.perfil && D.perfil.horas) || R.horasSugeridas(D.perfil && D.perfil.treino && D.perfil.treino.hora, D.perfil && D.perfil.treino && D.perfil.treino.duracao);
+const refeicoesDe = data => (D.registos[data] || [[], [], []]);
+const estadoRefeicao = nomes => !nomes.length ? "vazia" : R.problemas(nomes).length ? "quebra" : "segue";
+function sequencia() {
+  let d = hoje(); const okDia = x => refeicoesDe(x).every(n => estadoRefeicao(n) === "segue");
+  if (!okDia(d)) d = addDias(d, -1);
+  let n = 0; while (n < 400 && okDia(d)) { n++; d = addDias(d, -1); }
+  return n;
+}
+const pesoAtual = () => (D.pesos.length ? D.pesos[D.pesos.length - 1].kg : D.perfil && D.perfil.peso);
+
+/* ---------- ecrãs ---------- */
+const VIEWS = [["hoje", "Hoje"], ["juntar", "Posso juntar?"], ["competir", "Competir"], ["metodo", "Método"], ["perfil", "Perfil"]];
+let vista = "hoje";
+let juntar = [];           // alimentos escolhidos no "posso juntar?"
+let alvoPicker = null;     // índice da refeição a registar, ou null
+
+function topo(titulo, sub, eyebrow) {
+  return `<header class="top"><div class="eyebrow">${eyebrow || esc(fmtDia(hoje()))}</div><h1>${titulo}</h1>${sub ? `<p>${sub}</p>` : ""}</header>`;
+}
+function chip(nome, opts = {}) {
+  const g = R.grupo(nome);
+  return `<button class="chip ${opts.on ? "on" : ""}" style="--c:${corGrupo(g)}" data-act="${opts.act}" data-nome="${esc(nome)}" ${opts.i != null ? `data-i="${opts.i}"` : ""} aria-pressed="${!!opts.on}" title="${esc(NOME_GRUPO[g])}"><i></i>${esc(nome)}${opts.x ? '<span class="x" aria-hidden="true">×</span>' : ""}</button>`;
+}
+function veredito(nomes) {
+  if (!nomes.length) return `<div class="verdict vazio"><div><b>Escolhe os alimentos</b><span class="note">Toca nos alimentos da refeição. O veredito aparece aqui.</span></div></div>`;
+  const p = R.problemas(nomes);
+  if (!p.length) return `<div class="verdict ok"><div><b>Segue o método</b><span class="note">Pode ir para o prato junto.</span></div></div>`;
+  return `<div class="verdict bad"><div><b>Não junta</b><ul>${p.map(x => `<li>${esc(x[0].toUpperCase() + x.slice(1))}</li>`).join("")}</ul></div></div>`;
+}
+
+function viewHoje() {
+  const d = hoje(), t = treinoDe(d), h = horas(), regs = refeicoesDe(d);
+  const avisos = t ? R.avisosTreino(h, t.hora, t.duracao) : [];
+  const seq = sequencia();
+  let html = topo(`Olá${D.perfil.nome ? ", " + esc(D.perfil.nome.split(" ")[0]) : ""}`, t ? `Treino hoje às <b>${esc(t.hora)}</b> (${t.duracao} min).` : "Hoje não tens treino marcado.");
+  if (D.competidor.ativo) {
+    const p = planoComp();
+    if (p) html += `<a class="card" href="#competir" style="text-decoration:none;color:inherit"><div class="card-h"><h2>Rumo ao ${esc(p.categoria.nome)}</h2><span class="pill ${p.estado === "dentro" || p.estado === "confortavel" ? "ok" : p.estado === "exigente" ? "warn" : "bad"}">${esc(ESTADO[p.estado].curto)}</span></div><div class="note num">${p.estado === "dentro" ? `Estás dentro da categoria${p.folga != null ? `, com ${kg(p.folga)} kg de folga` : ""}.` : `Faltam ${kg(p.falta)} kg${p.dias != null && p.dias > 0 ? ` em ${p.dias} dias` : ""}.`}</div></a>`;
+  }
+  h.forEach((hora, i) => {
+    const r = R.REFEICOES[i], nomes = regs[i] || [], est = estadoRefeicao(nomes), p = R.problemas(nomes);
+    const av = avisos.filter(a => a.refeicao === i);
+    if (i > 0) html += `<div class="sep">Entre refeições: só água ou água de coco</div>`;
+    html += `<section class="card meal"><div><div class="hora num">${esc(hora)}</div></div><div style="min-width:0">
+      <div class="row" style="justify-content:space-between"><div class="tipo">${esc(r.nome)}</div><span class="pill ${est === "segue" ? "ok" : est === "quebra" ? "bad" : ""}">${est === "segue" ? "Segue o método" : est === "quebra" ? "Quebra" : "Por registar"}</span></div>
+      <p class="ideia">${esc(r.ideia)}</p>
+      ${nomes.length ? `<div class="chips">${nomes.map(n => chip(n, { act: "tirar", i, x: true })).join("")}</div>` : ""}
+      ${p.length ? `<ul class="prob">${p.map(x => `<li>${esc(x[0].toUpperCase() + x.slice(1))}</li>`).join("")}</ul>` : ""}
+      ${av.map(a => `<p class="note" style="color:var(--warn);margin:8px 0 0">${esc(a.texto)}</p>`).join("")}
+      <button class="btn ghost" data-act="registar" data-i="${i}" style="margin-top:6px">+ Registar alimento</button>
+    </div></section>`;
+  });
+  html += `<section class="card"><div class="card-h"><h2>Sequência</h2><span class="big num">${seq}<small> ${seq === 1 ? "dia" : "dias"}</small></span></div><p class="note" style="margin:0">Dias seguidos com as 3 refeições registadas e todas dentro do método.</p></section>`;
+  return html;
+}
+
+function picker(selecionados, act) {
+  const sel = new Set(selecionados);
+  return `<div class="field"><label for="pk-busca">Procurar ou escrever outro alimento</label><div class="row" style="flex-wrap:nowrap"><input id="pk-busca" placeholder="ex.: frango, arroz, melão" autocomplete="off"><button class="btn" data-act="pk-outro" data-alvo="${act}">Juntar</button></div></div>
+    <div id="pk-lista">${CATALOGO.map(([cat, lista]) => `<div class="grupo-cat" data-cat><h3>${esc(cat)}</h3><div class="chips">${lista.map(n => chip(n, { act, on: sel.has(n) })).join("")}</div></div>`).join("")}</div>`;
+}
+
+function viewJuntar() {
+  return topo("Posso juntar?", "Escolhe o que vais pôr no prato. O Tatame diz se a combinação segue o método.", "Verificador")
+    + `<section class="card" style="position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:5">${veredito(juntar)}${juntar.length ? `<div class="chips" style="margin-top:10px">${juntar.map(n => chip(n, { act: "j-tirar", x: true })).join("")}</div><button class="btn ghost" data-act="j-limpar" style="margin-top:6px">Limpar</button>` : ""}</section>`
+    + `<section class="card">${picker(juntar, "j-pick")}</section>`;
+}
+
+const ESTADO = {
+  dentro: { curto: "Dentro", titulo: "Já estás na categoria", texto: "Mantém o peso: come as 3 refeições e não cortes nada na semana do campeonato." },
+  confortavel: { curto: "Dá com folga", titulo: "Dá, com calma", texto: "O ritmo é seguro (até 0,7 % do peso por semana). Tira um pouco do amido nas refeições cozinhadas e mantém a proteína." },
+  exigente: { curto: "Exigente", titulo: "Dá, mas é exigente", texto: "Entre 0,7 e 1 % do peso por semana. Fala com o teu professor; o treino pode perder força." },
+  arriscado: { curto: "Arriscado", titulo: "Arriscado", texto: "Mais de 1 % do peso por semana: perdes músculo e rendimento. Pensa na categoria acima." },
+  passou: { curto: "Data passou", titulo: "A data já passou", texto: "Atualiza a data do campeonato." },
+};
+function planoComp() {
+  const c = D.competidor, peso = pesoAtual();
+  if (!c.ativo || !peso || c.categoria == null) return null;
+  return K.plano({ peso, modalidade: c.modalidade, sexo: c.sexo, categoria: c.categoria, data: c.data, hoje: hoje(), kimono: c.kimono });
+}
+function viewCompetir() {
+  const c = D.competidor;
+  let html = topo("Competir", "Categorias de peso de adulto da IBJJF e o caminho até ao peso, sem cortes de água.", "Modo competidor");
+  if (!c.ativo) return html + `<section class="card"><p style="margin-top:0">Vais competir? Diz a categoria e a data e o Tatame mostra quanto falta e se o ritmo é seguro.</p><button class="btn primary full" data-act="comp-on">Sou competidor</button></section>`;
+  const cats = K.categorias(c.modalidade, c.sexo);
+  const p = planoComp(), peso = pesoAtual();
+  html += `<section class="card"><div class="fgrid">
+    <div class="full"><span class="flabel">Modalidade</span><div class="seg" role="group" aria-label="Modalidade"><button data-act="comp-set" data-k="modalidade" data-v="gi" aria-pressed="${c.modalidade === "gi"}">Gi (kimono)</button><button data-act="comp-set" data-k="modalidade" data-v="nogi" aria-pressed="${c.modalidade === "nogi"}">No-gi</button></div></div>
+    <div class="full"><span class="flabel">Divisão</span><div class="seg" role="group" aria-label="Divisão"><button data-act="comp-set" data-k="sexo" data-v="masculino" aria-pressed="${c.sexo === "masculino"}">Masculino</button><button data-act="comp-set" data-k="sexo" data-v="feminino" aria-pressed="${c.sexo === "feminino"}">Feminino</button></div></div>
+    <div class="field full"><label for="cp-cat">Categoria alvo</label><select id="cp-cat" data-change="comp-cat">${cats.map(x => `<option value="${x.id}" ${x.id === c.categoria ? "selected" : ""}>${esc(x.nome)} · ${x.limite == null ? "sem limite" : "até " + kg(x.limite) + " kg"}</option>`).join("")}</select></div>
+    <div class="field"><label for="cp-data">Data do campeonato</label><input id="cp-data" type="date" value="${esc(c.data || "")}" data-change="comp-data"></div>
+    ${c.modalidade === "gi" ? `<div class="field"><label for="cp-kim">Peso do kimono (kg)</label><input id="cp-kim" type="number" inputmode="decimal" step="0.1" min="0.8" max="3.5" value="${c.kimono}" data-change="comp-kim"></div>` : "<div></div>"}
+  </div></section>`;
+  if (p) {
+    const e = ESTADO[p.estado];
+    html += `<section class="card"><div class="estado ${p.estado}"><b>${esc(e.titulo)}</b>
+      <div class="row num" style="margin:10px 0;gap:18px">
+        <div><div class="note">Hoje</div><div class="big">${kg(peso)}<small> kg</small></div></div>
+        <div><div class="note">Limite sem roupa</div><div class="big">${p.limite == null ? "—" : kg(p.limite)}<small>${p.limite == null ? "" : " kg"}</small></div></div>
+        ${p.falta ? `<div><div class="note">Por semana</div><div class="big">${p.porSemana != null ? kg(p.porSemana) : "—"}<small> kg</small></div></div>` : ""}
+      </div><p style="margin:0">${esc(e.texto)}</p></div>
+      ${p.atual && p.atual.id !== p.categoria.id ? `<p class="note">Com o peso de hoje caberias no <b>${esc(p.atual.nome)}</b>.</p>` : ""}
+      <p class="note">Na IBJJF pesas-te imediatamente antes da primeira luta${c.modalidade === "gi" ? ", com o kimono" : ""}: não há tempo para recuperar água. O peso tem de baixar com tempo.</p></section>`;
+  }
+  html += `<section class="card"><div class="card-h"><h2>Peso</h2></div>
+    <form id="f-peso" class="row" style="flex-wrap:nowrap"><div class="field" style="flex:1"><label for="ps-kg">Peso de hoje, de manhã, sem roupa (kg)</label><input id="ps-kg" type="number" inputmode="decimal" step="0.1" min="30" max="200" required></div><button class="btn primary" type="submit" style="align-self:flex-end">Registar</button></form>
+    ${grafico()}
+    <p class="note" style="margin-bottom:0">${esc(K.FONTE)}. Confirma o limite com o teu professor antes de te inscreveres.</p></section>
+    <button class="btn danger" data-act="comp-off">Deixar o modo competidor</button>`;
+  return html;
+}
+function grafico() {
+  const ps = D.pesos.slice(-20);
+  if (ps.length < 2) return `<p class="note">Regista o peso alguns dias para ver a linha.</p>`;
+  const W = 520, H = 150, L = 34, Rr = 8, T = 10, B = 22, xs = ps.map((_, i) => L + (W - L - Rr) * i / (ps.length - 1));
+  const vals = ps.map(p => p.kg), lim = planoComp() && planoComp().limite;
+  const all = lim ? [...vals, lim] : vals; const mn = Math.floor(Math.min(...all) - 0.5), mx = Math.ceil(Math.max(...all) + 0.5);
+  const y = v => T + (H - T - B) * (1 - (v - mn) / (mx - mn || 1));
+  const linha = vals.map((v, i) => `${i ? "L" : "M"}${xs[i].toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
+  return `<div class="spark"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Peso dos últimos registos, de ${kg(vals[0])} a ${kg(vals.at(-1))} kg">
+    ${[mn, mx].map(v => `<line x1="${L}" x2="${W - Rr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 3}" text-anchor="end">${v}</text>`).join("")}
+    ${lim ? `<line x1="${L}" x2="${W - Rr}" y1="${y(lim)}" y2="${y(lim)}" stroke="var(--ok)" stroke-dasharray="5 4"/><text x="${W - Rr}" y="${y(lim) - 4}" text-anchor="end" style="fill:var(--ok)">limite ${kg(lim)}</text>` : ""}
+    <path d="${linha}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>
+    <circle cx="${xs.at(-1)}" cy="${y(vals.at(-1))}" r="4.5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+    <text x="${L}" y="${H - 5}">${esc(fmtDia(ps[0].data))}</text><text x="${W - Rr}" y="${H - 5}" text-anchor="end">${esc(fmtDia(ps.at(-1).data))}</text>
+  </svg></div>`;
+}
+
+function viewMetodo() {
+  return topo("O método", "As regras do livro de Rorion Gracie, <i>The Gracie Diet</i> (2010), com a tabela de grupos de Carlos Gracie.", "Como funciona")
+    + `<section class="card"><div class="card-h"><h2>As 3 regras do dia</h2></div><ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+      <li><b>3 refeições</b>, com pelo menos <b>4 h 30</b> entre elas.</li><li>Entre refeições, <b>só água ou água de coco</b>.</li><li>Em cada refeição, só se juntam grupos que <b>combinam</b>.</li></ol></section>`
+    + `<section class="card"><div class="card-h"><h2>Os grupos</h2></div><table class="grupos"><tbody>${R.GRUPOS.map(g => `<tr><td><span class="gdot" style="--c:${corGrupo(g.grupo)}">${g.grupo.length === 1 ? g.grupo : g.grupo === "neutro" ? "N" : "×"}</span></td><td><b>${esc(g.nome)}</b><br>${esc(g.regra)}<div class="note">${esc(g.exemplos)}</div></td></tr>`).join("")}</tbody></table></section>`
+    + `<section class="card"><div class="card-h"><h2>Com honestidade</h2></div><p style="margin-top:0">O livro explica as regras com a digestão e a acidez do sangue. Isso não tem suporte científico: o intestino digere misturas sem problema. O Tatame ajuda a seguir o método, não promete resultados de saúde.</p><p class="note" style="margin-bottom:0">Comida simples, sem álcool, doces nem refrigerantes, a horas certas, faz bem em qualquer dieta. Para competir, o que pesa é o total do que comes e o tempo até à pesagem.</p></section>`;
+}
+
+function viewPerfil() {
+  const p = D.perfil, t = p.treino || { dias: [], hora: "", duracao: 90 }, h = horas();
+  return topo("Perfil", "Os dados ficam só neste telemóvel.", "Tu e o teu treino")
+    + `<section class="card"><form id="f-perfil" class="fgrid">
+      <div class="field full"><label for="pf-nome">Nome</label><input id="pf-nome" value="${esc(p.nome || "")}" autocomplete="given-name"></div>
+      <div class="field"><label for="pf-peso">Peso (kg)</label><input id="pf-peso" type="number" inputmode="decimal" step="0.1" value="${esc(pesoAtual() || "")}"></div>
+      <div class="field"><label for="pf-faixa">Faixa</label><select id="pf-faixa">${FAIXAS.map(f => `<option ${f === p.faixa ? "selected" : ""}>${f}</option>`).join("")}</select></div>
+      <div class="full"><span class="flabel">Dias de treino</span><div class="days" role="group" aria-label="Dias de treino">${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" data-act="pf-dia" data-d="${d}" aria-pressed="${t.dias.includes(d)}">${DS[d]}</button>`).join("")}</div></div>
+      <div class="field"><label for="pf-hora">Hora do treino</label><input id="pf-hora" type="time" value="${esc(t.hora || "")}"></div>
+      <div class="field"><label for="pf-dur">Duração (min)</label><input id="pf-dur" type="number" inputmode="numeric" min="30" max="240" step="15" value="${t.duracao || 90}"></div>
+      <div class="full"><span class="flabel">Horas das 3 refeições</span><div class="row" style="flex-wrap:nowrap">${h.map((x, i) => `<input type="time" id="pf-h${i}" value="${esc(x)}" aria-label="Refeição ${i + 1}" style="flex:1;border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:10px 8px;min-width:0;min-height:44px;font-size:16px">`).join("")}</div>
+        <button type="button" class="btn ghost" data-act="pf-sugerir">Sugerir pelas horas do treino</button></div>
+      <button class="btn primary full" type="submit">Guardar</button>
+    </form></section>
+    <section class="card"><div class="card-h"><h2>Cópia dos dados</h2></div><p class="note" style="margin-top:0">Guarda uma cópia para passar para outro telemóvel ou não perder nada.</p>
+      <div class="row"><button class="btn" data-act="exportar">Copiar os meus dados</button><label class="btn" for="imp-arq">Importar ficheiro</label><input id="imp-arq" type="file" accept="application/json,.json,.txt" hidden data-change="importar"></div>
+      <textarea id="exp-txt" readonly hidden style="width:100%;min-height:90px;margin-top:10px;font-size:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);padding:8px"></textarea></section>
+    <button class="btn danger" data-act="apagar">Apagar todos os dados</button>`;
+}
+
+function viewInicio() {
+  return `<header class="top hero">${LOGO}<div><div class="eyebrow">Alimentação para o jiu-jitsu</div><h1>Tatame</h1></div></header>
+    <section class="card"><p style="margin-top:0">O método de alimentação da família Gracie no teu telemóvel: o que podes juntar no prato, as 3 refeições à volta do treino e, se competes, o caminho até à categoria.</p>
+    <form id="f-inicio" class="fgrid">
+      <div class="field full"><label for="in-nome">Como te chamas?</label><input id="in-nome" autocomplete="given-name" required></div>
+      <div class="field"><label for="in-peso">Peso (kg)</label><input id="in-peso" type="number" inputmode="decimal" step="0.1" min="30" max="200" required></div>
+      <div class="field"><label for="in-hora">Hora habitual do treino</label><input id="in-hora" type="time" value="19:30"></div>
+      <div class="full"><span class="flabel">Dias de treino</span><div class="days" role="group" aria-label="Dias de treino">${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" data-act="in-dia" data-d="${d}" aria-pressed="${[1, 3, 5].includes(d)}">${DS[d]}</button>`).join("")}</div></div>
+      <label class="full row" style="gap:10px"><input type="checkbox" id="in-comp" style="width:22px;height:22px"> Vou competir</label>
+      <button class="btn primary full" type="submit">Começar</button>
+    </form></section>
+    <p class="note">Os teus dados ficam só neste telemóvel. Baseado em <i>The Gracie Diet</i>, de Rorion Gracie (2010). App independente.</p>`;
+}
+
+const LOGO = `<svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="var(--ink)"/><circle cx="32" cy="32" r="19" fill="var(--surface)"/><path d="M32 32 L32 13 A19 19 0 0 1 48.5 41.5 Z" fill="var(--g-A)"/><path d="M32 32 L48.5 41.5 A19 19 0 0 1 15.5 41.5 Z" fill="var(--g-B)"/><path d="M32 32 L15.5 41.5 A19 19 0 0 1 32 13 Z" fill="var(--g-C)"/><circle cx="32" cy="32" r="19" fill="none" stroke="var(--surface)" stroke-width="3"/><path d="M32 13V32L48.5 41.5M32 32L15.5 41.5" stroke="var(--surface)" stroke-width="3"/></svg>`;
+
+/* ---------- folha de registo ---------- */
+function abrirRegisto(i) {
+  alvoPicker = i;
+  const r = R.REFEICOES[i];
+  $("#sheet-root").innerHTML = `<div class="sheet-bg" data-act="fechar"><div class="sheet" role="dialog" aria-modal="true" aria-label="Registar na ${esc(r.nome)}"><div class="sheet-h"><h2>${esc(r.nome)} · ${esc(horas()[i])}</h2><button class="btn" data-act="fechar-btn">Feito</button></div><div id="sheet-ver">${veredito(refeicoesDe(hoje())[i] || [])}</div>${picker(refeicoesDe(hoje())[i] || [], "r-pick")}</div></div>`;
+}
+function atualizarSheet() {
+  const nomes = refeicoesDe(hoje())[alvoPicker] || [];
+  $("#sheet-ver").innerHTML = veredito(nomes);
+  document.querySelectorAll('#sheet-root [data-act="r-pick"]').forEach(b => { const on = nomes.includes(b.dataset.nome); b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+}
+function fecharSheet() { alvoPicker = null; $("#sheet-root").innerHTML = ""; render(); }
+function alternarRegisto(nome) {
+  const d = hoje(); const regs = D.registos[d] = refeicoesDe(d).map(x => [...x]);
+  const l = regs[alvoPicker]; const k = l.indexOf(nome); if (k >= 0) l.splice(k, 1); else l.push(nome);
+  gravar(); atualizarSheet();
+}
+
+/* ---------- render ---------- */
+function render() {
+  if (!D.perfil) { $("#tabs").hidden = true; $("#main").innerHTML = viewInicio(); return; }
+  $("#tabs").hidden = false;
+  $("#tabs").innerHTML = VIEWS.map(([id, nome]) => `<a href="#${id}" ${vista === id ? 'aria-current="page"' : ""}>${svg(id)}${nome === "Posso juntar?" ? "Juntar" : nome}</a>`).join("");
+  $("#main").innerHTML = { hoje: viewHoje, juntar: viewJuntar, competir: viewCompetir, metodo: viewMetodo, perfil: viewPerfil }[vista]();
+}
+function rota() { const h = location.hash.slice(1); vista = VIEWS.some(v => v[0] === h) ? h : "hoje"; render(); window.scrollTo(0, 0); }
+window.addEventListener("hashchange", rota);
+
+/* ---------- ações ---------- */
+let armado = null;
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-act]"); if (!el) return;
+  const a = el.dataset.act;
+  if (a === "fechar") { if (e.target === el) fecharSheet(); return; }
+  if (a !== "apagar" && armado) { armado.classList.remove("armed"); armado.textContent = armado.dataset.label; armado = null; }
+  switch (a) {
+    case "fechar-btn": fecharSheet(); break;
+    case "registar": abrirRegisto(+el.dataset.i); break;
+    case "r-pick": alternarRegisto(el.dataset.nome); break;
+    case "tirar": { const d = hoje(); const regs = D.registos[d] = refeicoesDe(d).map(x => [...x]); regs[+el.dataset.i] = regs[+el.dataset.i].filter(n => n !== el.dataset.nome); gravar(); render(); break; }
+    case "j-pick": { const n = el.dataset.nome; juntar = juntar.includes(n) ? juntar.filter(x => x !== n) : [...juntar, n]; render(); break; }
+    case "j-tirar": juntar = juntar.filter(x => x !== el.dataset.nome); render(); break;
+    case "j-limpar": juntar = []; render(); break;
+    case "pk-outro": { const v = ($("#pk-busca").value || "").trim(); if (!v) return; if (el.dataset.alvo === "r-pick") alternarRegisto(v); else { if (!juntar.includes(v)) juntar = [...juntar, v]; render(); } if (!R.grupo(v)) toast(`Não reconheço "${v}": não conta nas regras.`); break; }
+    case "in-dia": case "pf-dia": el.setAttribute("aria-pressed", el.getAttribute("aria-pressed") !== "true"); break;
+    case "pf-sugerir": { const s = R.horasSugeridas($("#pf-hora").value || null, +$("#pf-dur").value || 90); s.forEach((x, i) => ($(`#pf-h${i}`).value = x)); toast("Horas sugeridas. Toca em Guardar."); break; }
+    case "comp-on": ativarCompetidor(); gravar(); render(); break;
+    case "comp-off": D.competidor.ativo = false; gravar(); render(); break;
+    case "comp-set": { D.competidor[el.dataset.k] = el.dataset.v; const n = K.categorias(D.competidor.modalidade, D.competidor.sexo).length; if (D.competidor.categoria >= n) D.competidor.categoria = n - 1; gravar(); render(); break; }
+    case "exportar": { const txt = JSON.stringify(D); const ta = $("#exp-txt"); ta.hidden = false; ta.value = txt; try { navigator.clipboard.writeText(txt).then(() => toast("Dados copiados. Cola-os numa nota ou mensagem."), () => { ta.select(); }); } catch (_) { ta.select(); } break; }
+    case "apagar":
+      if (armado !== el) { el.dataset.label = el.textContent; el.classList.add("armed"); el.textContent = "Toca de novo para apagar tudo"; armado = el; return; }
+      armado = null; D = { perfil: null, competidor: { ativo: false }, registos: {}, pesos: [] }; gravar(); location.hash = ""; render(); break;
+  }
+});
+document.addEventListener("input", e => {
+  if (e.target.id !== "pk-busca") return;
+  const q = R.normalizar(e.target.value);
+  document.querySelectorAll("#pk-lista [data-cat]").forEach(cat => {
+    let algum = false;
+    cat.querySelectorAll(".chip").forEach(c => { const v = !q || R.normalizar(c.dataset.nome).includes(q); c.hidden = !v; algum = algum || v; });
+    cat.hidden = !algum;
+  });
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && alvoPicker != null) fecharSheet(); if (e.key === "Enter" && e.target.id === "pk-busca") { e.preventDefault(); const b = document.querySelector('[data-act="pk-outro"]'); if (b) b.click(); } });
+document.addEventListener("change", e => {
+  const k = e.target.dataset.change; if (!k) return;
+  if (k === "comp-cat") D.competidor.categoria = +e.target.value;
+  if (k === "comp-data") D.competidor.data = e.target.value;
+  if (k === "comp-kim") D.competidor.kimono = Math.min(3.5, Math.max(0.8, +e.target.value || 1.8));
+  if (k === "importar") {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    f.text().then(t => { const novo = JSON.parse(t); if (!novo || typeof novo !== "object" || !("registos" in novo)) throw new Error(); D = novo; gravar(); toast("Dados importados."); render(); }).catch(() => toast("Esse ficheiro não é uma cópia do Tatame."));
+    return;
+  }
+  gravar(); render();
+});
+document.addEventListener("submit", e => {
+  e.preventDefault();
+  const f = e.target.id;
+  if (f === "f-inicio") {
+    const dias = [...document.querySelectorAll('[data-act="in-dia"][aria-pressed="true"]')].map(b => +b.dataset.d);
+    const hora = $("#in-hora").value || null;
+    D.perfil = { nome: $("#in-nome").value.trim(), peso: +$("#in-peso").value, faixa: "Branca", treino: { dias, hora, duracao: 90 }, horas: R.horasSugeridas(hora, 90) };
+    D.pesos = [{ data: hoje(), kg: +$("#in-peso").value }];
+    const compete = $("#in-comp").checked;
+    if (compete) ativarCompetidor();
+    gravar();
+    if (compete && location.hash !== "#competir") location.hash = "competir"; else rota();
+    return;
+  }
+  if (f === "f-perfil") {
+    const hs = [0, 1, 2].map(i => $(`#pf-h${i}`).value);
+    const erro = R.horasValidas(hs); if (erro) { toast(erro); return; }
+    const peso = +$("#pf-peso").value;
+    D.perfil = { ...D.perfil, nome: $("#pf-nome").value.trim(), faixa: $("#pf-faixa").value, horas: hs,
+      treino: { dias: [...document.querySelectorAll('[data-act="pf-dia"][aria-pressed="true"]')].map(b => +b.dataset.d), hora: $("#pf-hora").value || null, duracao: +$("#pf-dur").value || 90 } };
+    if (peso && peso !== pesoAtual()) registarPeso(peso);
+    gravar(); toast("Perfil guardado."); render();
+  }
+  if (f === "f-peso") { registarPeso(+$("#ps-kg").value); gravar(); toast("Peso registado."); render(); }
+});
+function ativarCompetidor() {
+  D.competidor = { modalidade: "gi", sexo: "masculino", kimono: 1.8, data: addDias(hoje(), 56), categoria: null, ...D.competidor, ativo: true };
+  if (D.competidor.categoria == null) { const c = K.categoriaAtual(pesoAtual() || 70, D.competidor.modalidade, D.competidor.sexo, D.competidor.kimono); D.competidor.categoria = c ? c.id : 0; }
+}
+function registarPeso(v) { if (!v) return; D.pesos = D.pesos.filter(p => p.data !== hoje()); D.pesos.push({ data: hoje(), kg: v }); D.pesos.sort((a, b) => a.data.localeCompare(b.data)); }
+
+rota();
+})();
+</script>
