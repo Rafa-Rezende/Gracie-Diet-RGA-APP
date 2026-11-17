@@ -55,7 +55,8 @@ const pesoAtual = () => (D.pesos.length ? D.pesos[D.pesos.length - 1].kg : D.per
 const VIEWS = [["hoje", "Hoje"], ["juntar", "Posso juntar?"], ["competir", "Competir"], ["metodo", "Método"], ["perfil", "Perfil"]];
 let vista = "hoje";
 let juntar = [];           // alimentos escolhidos no "posso juntar?"
-let alvoPicker = null;     // índice da refeição a registar, ou null
+let alvoPicker = null;
+const mostrarBloq = new Set();   // categorias em que o utilizador pediu para ver os bloqueados     // índice da refeição a registar, ou null
 
 function topo(titulo, sub, extra = "") {
   return `<header class="top cab"><div style="min-width:0"><h1>${titulo}</h1><div class="meta">${esc(fmtDia(hoje()))}</div>${sub ? `<p>${sub}</p>` : ""}<div class="regua"></div></div>${extra}</header>`;
@@ -77,12 +78,8 @@ function viewHoje() {
   const avisos = t ? R.avisosTreino(h, t.hora, t.duracao) : [];
   const seq = sequencia();
   let html = topo(`Olá${D.perfil.nome ? ", " + esc(D.perfil.nome.split(" ")[0]) : ""}`, t ? `Treino hoje às <b>${esc(t.hora)}</b> (${t.duracao} min).` : "Hoje não tens treino marcado.", logoAcademia());
-  const puns = h.reduce((a, _, i) => a + R.problemas(regs[i] || []).length, 0);
-  html += `<section class="placar" aria-label="Placar do dia"><div class="col"><span class="lb">Doce</span><span class="hh">${esc(h[0])}</span><span class="lamp ${estadoRefeicao(regs[0] || [])}"></span></div>
-    <div class="col"><span class="lb">Cozinhada</span><span class="hh">${esc(h[1])}</span><span class="lamp ${estadoRefeicao(regs[1] || [])}"></span></div>
-    <div class="col"><span class="lb">Cozinhada</span><span class="hh">${esc(h[2])}</span><span class="lamp ${estadoRefeicao(regs[2] || [])}"></span></div>
-    <div class="col pun ${puns ? "" : "zero"}"><span class="lb">Punições</span><span class="hh">${puns}</span></div>
-    <div class="rodape"><span>${t ? `Treino ${esc(t.hora)}` : "Sem treino hoje"}</span><span>Sequência ${seq} ${seq === 1 ? "dia" : "dias"}</span></div></section>`;
+  const feitas = h.filter((_, i) => (regs[i] || []).length).length, puns = h.reduce((a, _, i) => a + R.problemas(regs[i] || []).length, 0);
+  html += `<p class="note" style="margin:-4px 0 0">${feitas} de 3 refeições registadas${puns ? ` · <b style="color:var(--bad)">${puns} ${puns === 1 ? "regra quebrada" : "regras quebradas"}</b>` : ""}.</p>`;
   if (D.competidor.ativo) {
     const p = planoComp();
     if (p) html += `<a class="card" href="#competir" style="text-decoration:none;color:inherit"><div class="card-h"><h2>Rumo ao ${esc(p.categoria.nome)}</h2><span class="pill ${p.estado === "dentro" || p.estado === "confortavel" ? "ok" : p.estado === "exigente" ? "warn" : "bad"}">${esc(ESTADO[p.estado].curto)}</span></div><div class="note num">${p.estado === "dentro" ? `Estás dentro da categoria${p.folga != null ? `, com ${kg(p.folga)} kg de folga` : ""}.` : `Faltam ${kg(p.falta)} kg${p.dias != null && p.dias > 0 ? ` em ${p.dias} dias` : ""}.`}</div></a>`;
@@ -91,13 +88,12 @@ function viewHoje() {
     const r = R.REFEICOES[i], nomes = regs[i] || [], est = estadoRefeicao(nomes), p = R.problemas(nomes);
     const av = avisos.filter(a => a.refeicao === i);
     if (i > 0) html += `<div class="sep">Entre refeições: só água ou água de coco</div>`;
-    html += `<section class="card meal"><div class="meal-h"><span class="hora num">${esc(hora)}</span><span class="tipo">${esc(r.nome)}</span><span class="pill ${est === "segue" ? "ok" : est === "quebra" ? "bad" : ""}">${est === "segue" ? "Segue o método" : est === "quebra" ? "Quebra" : "Por registar"}</span></div><div style="min-width:0">
+    html += `<section class="card meal"><div class="meal-h"><span class="hora num">${esc(hora)}</span><span class="tipo">${esc(r.nome)}</span><span class="pill ${est === "segue" ? "ok" : est === "quebra" ? "bad" : ""}">${est === "segue" ? "Segue" : est === "quebra" ? "Quebra" : "Por registar"}</span></div><div style="min-width:0">
       <p class="ideia">${esc(r.ideia)}</p>
       ${nomes.length ? `<div class="chips">${nomes.map(n => chip(n, { act: "tirar", i, x: true })).join("")}</div>` : ""}
       ${p.length ? `<ul class="prob">${p.map(x => `<li>${esc(x[0].toUpperCase() + x.slice(1))}</li>`).join("")}</ul>` : ""}
       ${av.map(a => `<p class="note" style="color:var(--warn);margin:8px 0 0">${esc(a.texto)}</p>`).join("")}
       <button class="btn ghost" data-act="registar" data-i="${i}" style="margin-top:6px">+ Registar alimento</button>
-      <div class="legenda">${est === "segue" ? "Segue o método." : est === "quebra" ? `${p.length} ${p.length === 1 ? "regra quebrada" : "regras quebradas"}.` : `${esc(r.nome)}, às ${esc(hora)}.`}</div>
     </div></section>`;
   });
   html += `<section class="card"><div class="card-h"><h2>Sequência</h2><span class="big num">${seq}<small> ${seq === 1 ? "dia" : "dias"}</small></span></div><p class="note" style="margin:0">Dias seguidos com as 3 refeições registadas e todas dentro do método.</p></section>`;
@@ -110,7 +106,19 @@ function picker(selecionados, act, tipo) {
   const cats = CATALOGO.map(([cat, lista]) => [cat, tipo ? lista.filter(n => (R.GRUPOS_REFEICAO[tipo] || []).includes(R.grupo(n))) : lista]).filter(([, l]) => l.length);
   const item = n => { if (!tipo) return chip(n, { act, on: sel.has(n) }); const v = R.podeEntrar(n, tipo, selecionados); return v.ok ? chip(n, { act, on: sel.has(n) }) : chip(n, { act: "bloqueado", off: v.motivo }); };
   return `<div class="field"><label for="pk-busca">Procurar ou escrever outro alimento</label><div class="row" style="flex-wrap:nowrap"><input id="pk-busca" placeholder="ex.: frango, arroz, melão" autocomplete="off"><button class="btn" data-act="pk-outro" data-alvo="${act}">Juntar</button></div></div>
-    <div id="pk-lista">${cats.map(([cat, lista]) => `<div class="grupo-cat" data-cat><h3>${esc(cat)}</h3><div class="chips">${lista.map(item).join("")}</div></div>`).join("")}</div>`;
+    <div id="pk-lista">${cats.map(([cat, lista]) => {
+      // numa refeição, o que já não pode entrar sai da lista e fica resumido numa frase (com opção de ver)
+      if (tipo && !mostrarBloq.has(cat)) {
+        const livres = lista.filter(n => sel.has(n) || R.podeEntrar(n, tipo, selecionados).ok);
+        const fora = lista.filter(n => !livres.includes(n));
+        if (fora.length && livres.length) {
+          const amidoEscolhido = selecionados.find(n => R.grupo(n) === "B");
+          const motivo = amidoEscolhido && fora.every(n => R.grupo(n) === "B") ? `um só amido por refeição (já tens ${amidoEscolhido.toLowerCase()})` : R.podeEntrar(fora[0], tipo, selecionados).motivo;
+          return `<div class="grupo-cat" data-cat><h3>${esc(cat)}</h3><div class="chips">${livres.map(item).join("")}</div><p class="bloq">${fora.length} ${fora.length === 1 ? "outro fica" : "outros ficam"} de fora: ${esc(motivo.replace(/\.$/, "").toLowerCase())}. <button data-act="ver-bloq" data-cat="${esc(cat)}">Ver</button></p></div>`;
+        }
+      }
+      return `<div class="grupo-cat" data-cat><h3>${esc(cat)}</h3><div class="chips">${lista.map(item).join("")}</div></div>`;
+    }).join("")}</div>`;
 }
 
 function viewJuntar() {
@@ -190,8 +198,7 @@ function viewMetodo() {
 function viewPerfil() {
   const p = D.perfil, t = p.treino || { dias: [], hora: "", duracao: 90 }, h = horas();
   return topo("Perfil", "Os dados ficam só neste telemóvel.")
-    + `<section class="card"><div class="card-h"><h2>Estilo</h2></div>
-      <div class="seg" role="group" aria-label="Estilo"><button data-act="estilo" data-v="parede" aria-pressed="${estilo() === "parede"}">Parede da academia</button><button data-act="estilo" data-v="placar" aria-pressed="${estilo() === "placar"}">Placar</button></div></section>
+    + `
     <section class="card"><form id="f-perfil" class="fgrid">
       <div class="field full"><label for="pf-nome">Nome</label><input id="pf-nome" value="${esc(p.nome || "")}" autocomplete="given-name"></div>
       <div class="field"><label for="pf-peso">Peso (kg)</label><input id="pf-peso" type="number" inputmode="decimal" step="0.1" value="${esc(pesoAtual() || "")}"></div>
@@ -241,7 +248,7 @@ function atualizarSheet() {
   $("#sheet-pk").innerHTML = picker(nomes, "r-pick", R.REFEICOES[alvoPicker].tipo);
   if (busca) { $("#pk-busca").value = busca; $("#pk-busca").dispatchEvent(new Event("input", { bubbles: true })); }
 }
-function fecharSheet() { alvoPicker = null; $("#sheet-root").innerHTML = ""; render(); }
+function fecharSheet() { alvoPicker = null; mostrarBloq.clear(); $("#sheet-root").innerHTML = ""; render(); }
 function alternarRegisto(nome) {
   const d = hoje(); const regs = D.registos[d] = refeicoesDe(d).map(x => [...x]);
   const l = regs[alvoPicker]; const k = l.indexOf(nome); if (k >= 0) l.splice(k, 1); else l.push(nome);
@@ -249,10 +256,7 @@ function alternarRegisto(nome) {
 }
 
 /* ---------- render ---------- */
-const estilo = () => D.estilo || "parede";
 function render() {
-  document.documentElement.dataset.estilo = estilo();
-  const tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.content = estilo() === "placar" ? "#0E1011" : "#ECE5D6";
   if (!D.perfil) { $("#tabs").hidden = true; $("#main").innerHTML = viewInicio(); return; }
   $("#tabs").hidden = false;
   $("#tabs").innerHTML = VIEWS.map(([id, nome]) => `<a href="#${id}" ${vista === id ? 'aria-current="page"' : ""}>${svg(id)}${nome === "Posso juntar?" ? "Juntar" : nome}</a>`).join("");
@@ -273,7 +277,7 @@ document.addEventListener("click", e => {
     case "registar": abrirRegisto(+el.dataset.i); break;
     case "r-pick": alternarRegisto(el.dataset.nome); break;
     case "bloqueado": toast(el.dataset.motivo); break;
-    case "estilo": D.estilo = el.dataset.v; gravar(); render(); break;
+    case "ver-bloq": mostrarBloq.add(el.dataset.cat); atualizarSheet(); break;
     case "logo-tirar": delete D.logoAcademia; gravar(); render(); break;
     case "tirar": { const d = hoje(); const regs = D.registos[d] = refeicoesDe(d).map(x => [...x]); regs[+el.dataset.i] = regs[+el.dataset.i].filter(n => n !== el.dataset.nome); gravar(); render(); break; }
     case "j-pick": { const n = el.dataset.nome; juntar = juntar.includes(n) ? juntar.filter(x => x !== n) : [...juntar, n]; render(); break; }

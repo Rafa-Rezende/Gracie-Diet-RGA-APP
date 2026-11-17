@@ -3,14 +3,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: uma coluna de telemóvel (máx. 560 px), abas em baixo. Dois estilos completos, escolhidos no Perfil:
-   "parede" = a parede da academia (papel creme, tinta, serifa, molduras com legenda; claro, de dia na cozinha);
-   "placar" = o placar de campeonato (carvão, números condensados, verde/amarelo/vermelho de pontos e punições; escuro, à noite no treino). */
+/* Layout: uma coluna de telemóvel (máx. 560 px), abas em baixo. Estilo "parede da academia": papel creme, tinta escura,
+   serifa só nos títulos grandes, cada refeição num quadro. Leitura primeiro: texto ≥ 15 px, contraste ≥ 4,5:1 em tudo o que se lê. */
 :root{
-  --bg:#ECE5D6; --surface:#F7F2E7; --surface-2:#EFE8DA; --line:#CFC5B2; --frame:#1D1A16;
-  --ink:#1D1A16; --muted:#5E564B; --faint:#8C8374;
+  --bg:#E4DAC6; --surface:#FCF9F2; --surface-2:#F3EDE0; --line:#B9AD96; --frame:#2A251F;
+  --ink:#1A1713; --muted:#4A4238; --faint:#625A4E;
   --accent:#1D1A16; --accent-ink:#F7F2E7; --accent-soft:#E2D9C6; --mark:#7E1E1E;
-  --ok:#3F6B45; --ok-soft:#DCE6D6; --bad:#7E1E1E; --bad-soft:#EDD8D2; --warn:#8A5A12; --warn-soft:#EFE1C4;
+  --ok:#2F5E37; --ok-soft:#DCE8D8; --bad:#7E1E1E; --bad-soft:#EDD8D2; --warn:#8A5A12; --warn-soft:#EFE1C4;
   --g-A:#4F7A55; --g-B:#A57E2C; --g-C:#9E4566; --g-D:#B05C2C; --g-E:#8F8126; --g-F:#3E6A8E; --g-coalhado:#6B5596; --g-neutro:#857D70; --g-evitar:#7E1E1E; --g-nunca:#5A1414; --g-x:#A39A8A;
   --f-display:"Cormorant Garamond",Georgia,"Times New Roman",serif; --f-num:"Cormorant Garamond",Georgia,serif;
   --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -18,20 +17,9 @@
   --r:4px; --r-chip:3px; --h-weight:700; --h-transform:none; --h-track:0;
   color-scheme:light;
 }
-:root[data-estilo="placar"]{
-  --bg:#0E1011; --surface:#171A1C; --surface-2:#1F2326; --line:#2D3236; --frame:#2D3236;
-  --ink:#F1F2EE; --muted:#A7ADA9; --faint:#6E7572;
-  --accent:#2CC27A; --accent-ink:#06140D; --accent-soft:#143323; --mark:#F2C230;
-  --ok:#2CC27A; --ok-soft:#123222; --bad:#F0565B; --bad-soft:#3A1719; --warn:#F2C230; --warn-soft:#3A3010;
-  --g-A:#4CC98A; --g-B:#F2C230; --g-C:#F07BAA; --g-D:#F5935A; --g-E:#E0D64E; --g-F:#5FB0F0; --g-coalhado:#B092F0; --g-neutro:#9AA19D; --g-evitar:#F0565B; --g-nunca:#FF8A8D; --g-x:#6E7572;
-  --f-display:"Barlow Condensed",ui-sans-serif,system-ui,sans-serif; --f-num:"Barlow Condensed",ui-sans-serif,sans-serif;
-  --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 10px 24px -14px rgba(0,0,0,.7);
-  --r:10px; --r-chip:999px; --h-weight:800; --h-transform:uppercase; --h-track:.02em;
-  color-scheme:dark;
-}
 
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;margin:0;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;margin:0;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -51,7 +39,7 @@ main{max-width:560px;margin:0 auto;padding-block:20px calc(96px + env(safe-area-
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);min-width:0}
 .card h2{font-size:24px;line-height:1.1}
 .card-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
-.note{font-size:13px;color:var(--muted)}
+.note{font-size:14px;color:var(--muted)}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:10px 14px;font-weight:600;font-size:14px;min-height:44px;text-decoration:none}
@@ -61,25 +49,29 @@ main{max-width:560px;margin:0 auto;padding-block:20px calc(96px + env(safe-area-
 .btn.armed{background:var(--bad);border-color:var(--bad);color:#fff}
 .btn.full{width:100%}
 
-.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.info{background:var(--accent-soft);color:var(--accent)}
 
-.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);border-radius:var(--r-chip);padding:7px 12px;font-size:14px;min-height:36px}
-.chip i{width:9px;height:9px;border-radius:50%;background:var(--c,var(--g-x));flex:none}
-.chip.on{background:color-mix(in srgb,var(--c) 16%,var(--surface));border-color:var(--c)}
-.chip.off{opacity:.42;border-style:dashed}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#FFFFFF;color:var(--ink);font-weight:500;border-radius:var(--r-chip);padding:8px 13px;font-size:15px;min-height:40px}
+.chip i{width:11px;height:11px;border-radius:50%;background:var(--c,var(--g-x));flex:none}
+.chip.on{background:color-mix(in srgb,var(--c) 18%,#fff);border-color:var(--c);border-width:2px;font-weight:600}
+.chip.off{background:transparent;border-style:dashed;color:var(--faint);text-decoration:line-through;text-decoration-thickness:1px}
+.chip.off i{background:transparent;box-shadow:inset 0 0 0 1.5px var(--faint)}
 .chip .x{margin-left:2px;color:var(--faint);font-weight:700}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 
 .meal{display:flex;flex-direction:column;gap:6px}
-.meal-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.meal-h .pill{margin-left:auto;align-self:center}
-.meal .hora{font-family:var(--f-num);font-size:30px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums lining-nums}
+.meal-h{display:flex;align-items:baseline;gap:10px}
+.meal-h .tipo{min-width:0;flex:1}
+.meal-h .pill{margin-left:auto;align-self:center;flex:none}
+.bloq{font-size:14px;color:var(--muted);margin:6px 0 0}
+.bloq button{background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:14px;font-weight:600}
+.meal .hora{font-family:var(--f-num);font-size:32px;flex:none;font-weight:700;line-height:1;font-variant-numeric:tabular-nums lining-nums}
 .meal .tipo{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
 
-.meal .ideia{font-size:13px;color:var(--muted);margin:2px 0 8px}
+.meal .ideia{font-size:15px;color:var(--muted);margin:0 0 10px}
 .prob{margin:8px 0 0;padding-left:18px;color:var(--bad);font-size:13px}
-.sep{text-align:center;font-size:12px;color:var(--faint);margin:-4px 0}
+.sep{text-align:center;font-size:14px;color:var(--muted);margin:-2px 0}
 
 .verdict{border-radius:14px;padding:14px;display:flex;gap:12px;align-items:flex-start}
 .verdict.ok{background:var(--ok-soft)} .verdict.bad{background:var(--bad-soft)} .verdict.vazio{background:var(--surface-2)}
@@ -88,10 +80,10 @@ main{max-width:560px;margin:0 auto;padding-block:20px calc(96px + env(safe-area-
 .verdict ul{margin:6px 0 0;padding-left:18px}
 
 .grupo-cat{margin-top:12px}
-.grupo-cat h3{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-family:var(--f-body);font-weight:700;margin-bottom:6px}
+.grupo-cat h3{font-size:14px;color:var(--ink);text-transform:uppercase;letter-spacing:.06em;font-family:var(--f-body);font-weight:700;margin-bottom:6px}
 
 .field{display:flex;flex-direction:column;gap:5px;min-width:0}
-.field label,.flabel{font-size:12px;color:var(--muted);font-weight:600}
+.field label,.flabel{font-size:14px;color:var(--muted);font-weight:600}
 .field input,.field select{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:10px 12px;width:100%;min-width:0;font-size:16px;min-height:44px}
 .fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .fgrid .full{grid-column:1/-1}
@@ -115,47 +107,28 @@ table.grupos td:first-child{width:28px}
 .gdot{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--c);color:#fff;font-weight:800;font-size:13px}
 
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
-.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--faint);text-decoration:none;padding:6px 0;min-height:48px}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;padding:6px 0;min-height:48px}
 .tabs a svg{width:22px;height:22px}
 .tabs a[aria-current="page"]{color:var(--accent)}
 
 .sheet-bg{position:fixed;inset:0;background:rgba(10,12,16,.5);z-index:40;display:flex;align-items:flex-end;justify-content:center}
 .sheet{background:var(--bg);width:min(560px,100%);max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
 .sheet-h{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-16px;background:var(--bg);padding-block:4px}
-.sheet-h h2{font-size:26px}
+.sheet-h h2{font-size:26px;line-height:1.1}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;z-index:60;max-width:calc(100% - 32px)}
 .logo{width:44px;height:44px;border-radius:10px;flex:none}
 .hero{display:flex;gap:12px;align-items:center}
 
-/* ---- assinatura "parede": cada refeição é um retrato emoldurado, com passe-partout e legenda ---- */
-:root:not([data-estilo="placar"]) .meal{border:1px solid var(--frame);box-shadow:inset 0 0 0 6px var(--surface),inset 0 0 0 7px var(--line),var(--shadow);padding:20px 18px}
-:root:not([data-estilo="placar"]) .meal .tipo{font-family:var(--f-display);font-style:italic;font-size:18px;text-transform:none;letter-spacing:0;color:var(--ink);font-weight:600}
-:root:not([data-estilo="placar"]) .legenda{font-family:var(--f-display);font-style:italic;font-size:16px;color:var(--muted);border-top:1px solid var(--line);margin-top:12px;padding-top:8px}
-:root:not([data-estilo="placar"]) .top h1{font-size:44px;font-weight:700}
-:root:not([data-estilo="placar"]) .top .regua{height:3px;width:56px;background:var(--mark);margin-top:10px}
-:root:not([data-estilo="placar"]) .pill{border-radius:2px;font-family:var(--f-body)}
-:root:not([data-estilo="placar"]) .tabs a[aria-current="page"]{color:var(--mark)}
-:root:not([data-estilo="placar"]) .placar{display:none}
-
-/* ---- assinatura "placar": o dia num placar de campeonato, punições anotadas como as do árbitro ---- */
-:root[data-estilo="placar"] .regua,:root[data-estilo="placar"] .legenda{display:none}
-.placar{background:#050607;border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:6px 10px;align-items:end;color:var(--ink)}
-.placar .col{display:flex;flex-direction:column;gap:2px;min-width:0}
-.placar .lb{font-family:var(--f-num);font-weight:700;font-size:13px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
-.placar .hh{font-family:var(--f-num);font-weight:800;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
-.placar .lamp{height:6px;border-radius:2px;background:var(--line);margin-top:4px}
-.placar .lamp.segue{background:var(--ok);box-shadow:0 0 12px -2px var(--ok)}
-.placar .lamp.quebra{background:var(--bad);box-shadow:0 0 12px -2px var(--bad)}
-.placar .pun{border-left:1px solid var(--line);padding-left:10px;text-align:center}
-.placar .pun .hh{color:var(--bad)}
-.placar .pun.zero .hh{color:var(--ok)}
-.placar .rodape{grid-column:1/-1;display:flex;justify-content:space-between;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
-:root[data-estilo="placar"] .prob li::marker{content:"P  ";font-family:var(--f-num);font-weight:800;color:var(--bad)}
-:root[data-estilo="placar"] .meal .tipo{font-family:var(--f-num);font-size:16px;letter-spacing:.08em;color:var(--ink)}
+/* ---- assinatura "parede": cada refeição num quadro, com o filete escuro em cima ---- */
+.meal{border:1px solid var(--frame);border-top-width:3px;padding:18px 16px}
+.meal .tipo{font-family:var(--f-body);font-size:16px;font-weight:700;text-transform:none;letter-spacing:0;color:var(--ink)}
+.top h1{font-size:44px;font-weight:700}
+.top .regua{height:3px;width:56px;background:var(--mark);margin-top:10px}
+.pill{border-radius:2px;font-family:var(--f-body)}
+.tabs a[aria-current="page"]{color:var(--mark)}
 
 .academia{width:44px;height:44px;object-fit:contain;border-radius:6px;background:var(--surface);border:1px solid var(--line);padding:3px;flex:none}
 .cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-@media (prefers-reduced-motion:no-preference){.placar .lamp{transition:background .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1)}}
 </style>
 <main id="main" aria-live="polite"></main>
 <nav class="tabs" id="tabs" aria-label="Secções"></nav>
@@ -473,7 +446,8 @@ const pesoAtual = () => (D.pesos.length ? D.pesos[D.pesos.length - 1].kg : D.per
 const VIEWS = [["hoje", "Hoje"], ["juntar", "Posso juntar?"], ["competir", "Competir"], ["metodo", "Método"], ["perfil", "Perfil"]];
 let vista = "hoje";
 let juntar = [];           // alimentos escolhidos no "posso juntar?"
-let alvoPicker = null;     // índice da refeição a registar, ou null
+let alvoPicker = null;
+const mostrarBloq = new Set();   // categorias em que o utilizador pediu para ver os bloqueados     // índice da refeição a registar, ou null
 
 function topo(titulo, sub, extra = "") {
   return `<header class="top cab"><div style="min-width:0"><h1>${titulo}</h1><div class="meta">${esc(fmtDia(hoje()))}</div>${sub ? `<p>${sub}</p>` : ""}<div class="regua"></div></div>${extra}</header>`;
@@ -495,12 +469,8 @@ function viewHoje() {
   const avisos = t ? R.avisosTreino(h, t.hora, t.duracao) : [];
   const seq = sequencia();
   let html = topo(`Olá${D.perfil.nome ? ", " + esc(D.perfil.nome.split(" ")[0]) : ""}`, t ? `Treino hoje às <b>${esc(t.hora)}</b> (${t.duracao} min).` : "Hoje não tens treino marcado.", logoAcademia());
-  const puns = h.reduce((a, _, i) => a + R.problemas(regs[i] || []).length, 0);
-  html += `<section class="placar" aria-label="Placar do dia"><div class="col"><span class="lb">Doce</span><span class="hh">${esc(h[0])}</span><span class="lamp ${estadoRefeicao(regs[0] || [])}"></span></div>
-    <div class="col"><span class="lb">Cozinhada</span><span class="hh">${esc(h[1])}</span><span class="lamp ${estadoRefeicao(regs[1] || [])}"></span></div>
-    <div class="col"><span class="lb">Cozinhada</span><span class="hh">${esc(h[2])}</span><span class="lamp ${estadoRefeicao(regs[2] || [])}"></span></div>
-    <div class="col pun ${puns ? "" : "zero"}"><span class="lb">Punições</span><span class="hh">${puns}</span></div>
-    <div class="rodape"><span>${t ? `Treino ${esc(t.hora)}` : "Sem treino hoje"}</span><span>Sequência ${seq} ${seq === 1 ? "dia" : "dias"}</span></div></section>`;
+  const feitas = h.filter((_, i) => (regs[i] || []).length).length, puns = h.reduce((a, _, i) => a + R.problemas(regs[i] || []).length, 0);
+  html += `<p class="note" style="margin:-4px 0 0">${feitas} de 3 refeições registadas${puns ? ` · <b style="color:var(--bad)">${puns} ${puns === 1 ? "regra quebrada" : "regras quebradas"}</b>` : ""}.</p>`;
   if (D.competidor.ativo) {
     const p = planoComp();
     if (p) html += `<a class="card" href="#competir" style="text-decoration:none;color:inherit"><div class="card-h"><h2>Rumo ao ${esc(p.categoria.nome)}</h2><span class="pill ${p.estado === "dentro" || p.estado === "confortavel" ? "ok" : p.estado === "exigente" ? "warn" : "bad"}">${esc(ESTADO[p.estado].curto)}</span></div><div class="note num">${p.estado === "dentro" ? `Estás dentro da categoria${p.folga != null ? `, com ${kg(p.folga)} kg de folga` : ""}.` : `Faltam ${kg(p.falta)} kg${p.dias != null && p.dias > 0 ? ` em ${p.dias} dias` : ""}.`}</div></a>`;
@@ -509,13 +479,12 @@ function viewHoje() {
     const r = R.REFEICOES[i], nomes = regs[i] || [], est = estadoRefeicao(nomes), p = R.problemas(nomes);
     const av = avisos.filter(a => a.refeicao === i);
     if (i > 0) html += `<div class="sep">Entre refeições: só água ou água de coco</div>`;
-    html += `<section class="card meal"><div class="meal-h"><span class="hora num">${esc(hora)}</span><span class="tipo">${esc(r.nome)}</span><span class="pill ${est === "segue" ? "ok" : est === "quebra" ? "bad" : ""}">${est === "segue" ? "Segue o método" : est === "quebra" ? "Quebra" : "Por registar"}</span></div><div style="min-width:0">
+    html += `<section class="card meal"><div class="meal-h"><span class="hora num">${esc(hora)}</span><span class="tipo">${esc(r.nome)}</span><span class="pill ${est === "segue" ? "ok" : est === "quebra" ? "bad" : ""}">${est === "segue" ? "Segue" : est === "quebra" ? "Quebra" : "Por registar"}</span></div><div style="min-width:0">
       <p class="ideia">${esc(r.ideia)}</p>
       ${nomes.length ? `<div class="chips">${nomes.map(n => chip(n, { act: "tirar", i, x: true })).join("")}</div>` : ""}
       ${p.length ? `<ul class="prob">${p.map(x => `<li>${esc(x[0].toUpperCase() + x.slice(1))}</li>`).join("")}</ul>` : ""}
       ${av.map(a => `<p class="note" style="color:var(--warn);margin:8px 0 0">${esc(a.texto)}</p>`).join("")}
       <button class="btn ghost" data-act="registar" data-i="${i}" style="margin-top:6px">+ Registar alimento</button>
-      <div class="legenda">${est === "segue" ? "Segue o método." : est === "quebra" ? `${p.length} ${p.length === 1 ? "regra quebrada" : "regras quebradas"}.` : `${esc(r.nome)}, às ${esc(hora)}.`}</div>
     </div></section>`;
   });
   html += `<section class="card"><div class="card-h"><h2>Sequência</h2><span class="big num">${seq}<small> ${seq === 1 ? "dia" : "dias"}</small></span></div><p class="note" style="margin:0">Dias seguidos com as 3 refeições registadas e todas dentro do método.</p></section>`;
@@ -528,7 +497,19 @@ function picker(selecionados, act, tipo) {
   const cats = CATALOGO.map(([cat, lista]) => [cat, tipo ? lista.filter(n => (R.GRUPOS_REFEICAO[tipo] || []).includes(R.grupo(n))) : lista]).filter(([, l]) => l.length);
   const item = n => { if (!tipo) return chip(n, { act, on: sel.has(n) }); const v = R.podeEntrar(n, tipo, selecionados); return v.ok ? chip(n, { act, on: sel.has(n) }) : chip(n, { act: "bloqueado", off: v.motivo }); };
   return `<div class="field"><label for="pk-busca">Procurar ou escrever outro alimento</label><div class="row" style="flex-wrap:nowrap"><input id="pk-busca" placeholder="ex.: frango, arroz, melão" autocomplete="off"><button class="btn" data-act="pk-outro" data-alvo="${act}">Juntar</button></div></div>
-    <div id="pk-lista">${cats.map(([cat, lista]) => `<div class="grupo-cat" data-cat><h3>${esc(cat)}</h3><div class="chips">${lista.map(item).join("")}</div></div>`).join("")}</div>`;
+    <div id="pk-lista">${cats.map(([cat, lista]) => {
+      // numa refeição, o que já não pode entrar sai da lista e fica resumido numa frase (com opção de ver)
+      if (tipo && !mostrarBloq.has(cat)) {
+        const livres = lista.filter(n => sel.has(n) || R.podeEntrar(n, tipo, selecionados).ok);
+        const fora = lista.filter(n => !livres.includes(n));
+        if (fora.length && livres.length) {
+          const amidoEscolhido = selecionados.find(n => R.grupo(n) === "B");
+          const motivo = amidoEscolhido && fora.every(n => R.grupo(n) === "B") ? `um só amido por refeição (já tens ${amidoEscolhido.toLowerCase()})` : R.podeEntrar(fora[0], tipo, selecionados).motivo;
+          return `<div class="grupo-cat" data-cat><h3>${esc(cat)}</h3><div class="chips">${livres.map(item).join("")}</div><p class="bloq">${fora.length} ${fora.length === 1 ? "outro fica" : "outros ficam"} de fora: ${esc(motivo.replace(/\.$/, "").toLowerCase())}. <button data-act="ver-bloq" data-cat="${esc(cat)}">Ver</button></p></div>`;
+        }
+      }
+      return `<div class="grupo-cat" data-cat><h3>${esc(cat)}</h3><div class="chips">${lista.map(item).join("")}</div></div>`;
+    }).join("")}</div>`;
 }
 
 function viewJuntar() {
@@ -608,8 +589,7 @@ function viewMetodo() {
 function viewPerfil() {
   const p = D.perfil, t = p.treino || { dias: [], hora: "", duracao: 90 }, h = horas();
   return topo("Perfil", "Os dados ficam só neste telemóvel.")
-    + `<section class="card"><div class="card-h"><h2>Estilo</h2></div>
-      <div class="seg" role="group" aria-label="Estilo"><button data-act="estilo" data-v="parede" aria-pressed="${estilo() === "parede"}">Parede da academia</button><button data-act="estilo" data-v="placar" aria-pressed="${estilo() === "placar"}">Placar</button></div></section>
+    + `
     <section class="card"><form id="f-perfil" class="fgrid">
       <div class="field full"><label for="pf-nome">Nome</label><input id="pf-nome" value="${esc(p.nome || "")}" autocomplete="given-name"></div>
       <div class="field"><label for="pf-peso">Peso (kg)</label><input id="pf-peso" type="number" inputmode="decimal" step="0.1" value="${esc(pesoAtual() || "")}"></div>
@@ -659,7 +639,7 @@ function atualizarSheet() {
   $("#sheet-pk").innerHTML = picker(nomes, "r-pick", R.REFEICOES[alvoPicker].tipo);
   if (busca) { $("#pk-busca").value = busca; $("#pk-busca").dispatchEvent(new Event("input", { bubbles: true })); }
 }
-function fecharSheet() { alvoPicker = null; $("#sheet-root").innerHTML = ""; render(); }
+function fecharSheet() { alvoPicker = null; mostrarBloq.clear(); $("#sheet-root").innerHTML = ""; render(); }
 function alternarRegisto(nome) {
   const d = hoje(); const regs = D.registos[d] = refeicoesDe(d).map(x => [...x]);
   const l = regs[alvoPicker]; const k = l.indexOf(nome); if (k >= 0) l.splice(k, 1); else l.push(nome);
@@ -667,10 +647,7 @@ function alternarRegisto(nome) {
 }
 
 /* ---------- render ---------- */
-const estilo = () => D.estilo || "parede";
 function render() {
-  document.documentElement.dataset.estilo = estilo();
-  const tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.content = estilo() === "placar" ? "#0E1011" : "#ECE5D6";
   if (!D.perfil) { $("#tabs").hidden = true; $("#main").innerHTML = viewInicio(); return; }
   $("#tabs").hidden = false;
   $("#tabs").innerHTML = VIEWS.map(([id, nome]) => `<a href="#${id}" ${vista === id ? 'aria-current="page"' : ""}>${svg(id)}${nome === "Posso juntar?" ? "Juntar" : nome}</a>`).join("");
@@ -691,7 +668,7 @@ document.addEventListener("click", e => {
     case "registar": abrirRegisto(+el.dataset.i); break;
     case "r-pick": alternarRegisto(el.dataset.nome); break;
     case "bloqueado": toast(el.dataset.motivo); break;
-    case "estilo": D.estilo = el.dataset.v; gravar(); render(); break;
+    case "ver-bloq": mostrarBloq.add(el.dataset.cat); atualizarSheet(); break;
     case "logo-tirar": delete D.logoAcademia; gravar(); render(); break;
     case "tirar": { const d = hoje(); const regs = D.registos[d] = refeicoesDe(d).map(x => [...x]); regs[+el.dataset.i] = regs[+el.dataset.i].filter(n => n !== el.dataset.nome); gravar(); render(); break; }
     case "j-pick": { const n = el.dataset.nome; juntar = juntar.includes(n) ? juntar.filter(x => x !== n) : [...juntar, n]; render(); break; }
