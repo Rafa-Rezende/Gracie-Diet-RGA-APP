@@ -4,7 +4,7 @@ App web de telemóvel com o método de alimentação da família Gracie para que
 
 ## Onde está
 
-- Repositório: `Rafa-Rezende/Gracie-Diet-RGA-APP` (pasta local costuma ser `tatame`, o nome provisório antigo).
+- Repositório: `Rafa-Rezende/Gracie-Diet-RGA-APP` (pasta local: `GracieDietApp`).
 - Site: Vercel, publica sozinho a cada push no `main` (o utilizador ainda não partilhou o endereço; perguntar e registar aqui).
 - Pré-visualização privada: https://claude.ai/artifact/GkH3zRjjvCobJBAxt4R4AY (republicar com a ferramenta Artifact, `file_path` = `index.html`).
 
