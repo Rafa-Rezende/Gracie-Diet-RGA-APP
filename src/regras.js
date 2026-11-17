@@ -141,5 +141,24 @@ const REFEICOES = [{ tipo: "C", nome: "Refeição doce", ideia: "Fruta doce, que
   { tipo: "A", nome: "Refeição cozinhada", ideia: "Proteína, legumes e azeite com um só amido (arroz, batata ou massa)." },
   { tipo: "A", nome: "Refeição cozinhada", ideia: "Proteína, legumes e azeite com um só amido." }];
 
-raiz.TatameRegras = { grupo, familiaAmido, problemas, normalizar, GRUPOS, REFEICOES, horasValidas, horasSugeridas, avisosTreino, minutos, hm, INTERVALO_MIN };
+
+// ---------------------------------------------------------------- o que entra em cada refeição
+// Refeição doce: fruta doce e queijo fresco (C) com um amido sem gordura (B). Cozinhada: A com um só amido (B).
+const GRUPOS_REFEICAO = { C: ["C", "B", "neutro"], A: ["A", "B", "neutro"] };
+const NOME_TIPO = { C: "refeição doce", A: "refeição cozinhada" };
+const NOMES_GRUPO = { A: "cozinhados", B: "amidos", C: "fruta doce e queijo fresco", D: "fruta ácida", E: "banana crua", F: "leite", coalhado: "iogurte e kefir", neutro: "neutros", evitar: "a evitar", nunca: "fora do método" };
+
+/** Pode `nome` entrar numa refeição do `tipo` ("C" ou "A") que já tem `atuais`? {ok, motivo}. */
+function podeEntrar(nome, tipo, atuais = []) {
+  const g = grupo(nome);
+  if (atuais.includes(nome)) return { ok: true };
+  if (!g) return { ok: false, motivo: `Não reconheço "${nome}".` };
+  if (!(GRUPOS_REFEICAO[tipo] || []).includes(g)) return { ok: false, motivo: `${nome} é de ${NOMES_GRUPO[g]}: não entra na ${NOME_TIPO[tipo]}.` };
+  if (tipo === "C" && g === "B" && texto(nome).includes("frit")) return { ok: false, motivo: "Na refeição doce o amido não pode ser frito." };
+  const antes = problemas(atuais).length, depois = problemas([...atuais, nome]);
+  if (depois.length > antes) return { ok: false, motivo: depois[depois.length - 1][0].toUpperCase() + depois[depois.length - 1].slice(1) + "." };
+  return { ok: true };
+}
+
+raiz.TatameRegras = { podeEntrar, GRUPOS_REFEICAO, grupo, familiaAmido, problemas, normalizar, GRUPOS, REFEICOES, horasValidas, horasSugeridas, avisosTreino, minutos, hm, INTERVALO_MIN };
 })(typeof window !== "undefined" ? window : globalThis);

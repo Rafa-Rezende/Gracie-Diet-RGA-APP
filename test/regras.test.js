@@ -38,3 +38,23 @@ test("todos os alimentos do catálogo têm grupo", () => {
   require("../src/alimentos.js");
   for (const [, lista] of globalThis.TatameAlimentos) for (const n of lista) assert.ok(R.grupo(n), n);
 });
+
+test("refeição doce: só fruta doce, queijo fresco, amido e neutros", () => {
+  assert.equal(R.podeEntrar("Melão", "C").ok, true);
+  assert.equal(R.podeEntrar("Pão integral", "C").ok, true);
+  assert.equal(R.podeEntrar("Café", "C").ok, true);
+  assert.equal(R.podeEntrar("Frango", "C").ok, false);
+  assert.equal(R.podeEntrar("Laranja", "C").ok, false);
+  assert.equal(R.podeEntrar("Batata frita", "C").ok, false);
+});
+test("refeição cozinhada: proteína, legumes, gordura e um só amido", () => {
+  assert.equal(R.podeEntrar("Frango", "A").ok, true);
+  assert.equal(R.podeEntrar("Queijo fresco", "A").ok, false);
+  assert.equal(R.podeEntrar("Arroz", "A", ["Frango"]).ok, true);
+  const f = R.podeEntrar("Feijão", "A", ["Frango", "Arroz"]);
+  assert.equal(f.ok, false); assert.match(f.motivo, /dois amidos/i);
+  assert.equal(R.podeEntrar("Massa", "A", ["Pão"]).ok, true);   // ambos trigo
+});
+test("alimento desconhecido não entra na refeição", () => {
+  assert.equal(R.podeEntrar("Molho XPTO", "A").ok, false);
+});

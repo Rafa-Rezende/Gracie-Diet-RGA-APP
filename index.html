@@ -1,33 +1,34 @@
-<title>Tatame</title>
+<title>Gracie Diet</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: uma coluna de telemóvel (máx. 560 px) sobre a lona do tatame; abas em baixo. Cores dos grupos do método. */
+/* Layout: uma coluna de telemóvel (máx. 560 px), abas em baixo. Dois estilos completos, escolhidos no Perfil:
+   "parede" = a parede da academia (papel creme, tinta, serifa, molduras com legenda; claro, de dia na cozinha);
+   "placar" = o placar de campeonato (carvão, números condensados, verde/amarelo/vermelho de pontos e punições; escuro, à noite no treino). */
 :root{
-  --bg:#F3F1EB; --surface:#FFFFFF; --surface-2:#F7F5F0; --line:#E3DFD5;
-  --ink:#15171C; --muted:#5F636D; --faint:#9A9DA5;
-  --accent:#1D4E9E; --accent-ink:#FFFFFF; --accent-soft:#E3EBF8;
-  --ok:#23845A; --ok-soft:#E0F2E8; --bad:#C23B3B; --bad-soft:#FBE4E2; --warn:#B4690E; --warn-soft:#FCEFD9;
-  --g-A:#2F8F5B; --g-B:#C08412; --g-C:#C2477A; --g-D:#D9662B; --g-E:#A99A12; --g-F:#2E7DBF; --g-coalhado:#7A5AB8; --g-neutro:#8A8F99; --g-evitar:#C23B3B; --g-nunca:#8E1F1F; --g-x:#9A9DA5;
-  --f-display:"Barlow Condensed",ui-sans-serif,system-ui,sans-serif;
+  --bg:#ECE5D6; --surface:#F7F2E7; --surface-2:#EFE8DA; --line:#CFC5B2; --frame:#1D1A16;
+  --ink:#1D1A16; --muted:#5E564B; --faint:#8C8374;
+  --accent:#1D1A16; --accent-ink:#F7F2E7; --accent-soft:#E2D9C6; --mark:#7E1E1E;
+  --ok:#3F6B45; --ok-soft:#DCE6D6; --bad:#7E1E1E; --bad-soft:#EDD8D2; --warn:#8A5A12; --warn-soft:#EFE1C4;
+  --g-A:#4F7A55; --g-B:#A57E2C; --g-C:#9E4566; --g-D:#B05C2C; --g-E:#8F8126; --g-F:#3E6A8E; --g-coalhado:#6B5596; --g-neutro:#857D70; --g-evitar:#7E1E1E; --g-nunca:#5A1414; --g-x:#A39A8A;
+  --f-display:"Cormorant Garamond",Georgia,"Times New Roman",serif; --f-num:"Cormorant Garamond",Georgia,serif;
   --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-  --shadow:0 1px 2px rgba(21,23,28,.05),0 6px 18px rgba(21,23,28,.05);
+  --shadow:0 1px 1px rgba(29,26,22,.06),0 8px 22px -12px rgba(29,26,22,.28);
+  --r:4px; --r-chip:3px; --h-weight:700; --h-transform:none; --h-track:0;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#121317; --surface:#1B1D23; --surface-2:#22252C; --line:#2E323B;
-  --ink:#ECEDF0; --muted:#A4A8B2; --faint:#6C717C;
-  --accent:#7FA6EA; --accent-ink:#0F1726; --accent-soft:#1F2A40;
-  --ok:#5CCB93; --ok-soft:#173326; --bad:#F07C7C; --bad-soft:#3A1E1E; --warn:#F0AE57; --warn-soft:#3A2B17;
-  --g-A:#5CC28A; --g-B:#E2AE45; --g-C:#EA7AAA; --g-D:#F29460; --g-E:#D6C845; --g-F:#68AEE8; --g-coalhado:#A98BE6; --g-neutro:#9EA3AD; --g-evitar:#F07C7C; --g-nunca:#E35A5A; --g-x:#6C717C;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#121317; --surface:#1B1D23; --surface-2:#22252C; --line:#2E323B;
-  --ink:#ECEDF0; --muted:#A4A8B2; --faint:#6C717C;
-  --accent:#7FA6EA; --accent-ink:#0F1726; --accent-soft:#1F2A40;
-  --ok:#5CCB93; --ok-soft:#173326; --bad:#F07C7C; --bad-soft:#3A1E1E; --warn:#F0AE57; --warn-soft:#3A2B17;
-  --g-A:#5CC28A; --g-B:#E2AE45; --g-C:#EA7AAA; --g-D:#F29460; --g-E:#D6C845; --g-F:#68AEE8; --g-coalhado:#A98BE6; --g-neutro:#9EA3AD; --g-evitar:#F07C7C; --g-nunca:#E35A5A; --g-x:#6C717C;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); color-scheme:dark}
+:root[data-estilo="placar"]{
+  --bg:#0E1011; --surface:#171A1C; --surface-2:#1F2326; --line:#2D3236; --frame:#2D3236;
+  --ink:#F1F2EE; --muted:#A7ADA9; --faint:#6E7572;
+  --accent:#2CC27A; --accent-ink:#06140D; --accent-soft:#143323; --mark:#F2C230;
+  --ok:#2CC27A; --ok-soft:#123222; --bad:#F0565B; --bad-soft:#3A1719; --warn:#F2C230; --warn-soft:#3A3010;
+  --g-A:#4CC98A; --g-B:#F2C230; --g-C:#F07BAA; --g-D:#F5935A; --g-E:#E0D64E; --g-F:#5FB0F0; --g-coalhado:#B092F0; --g-neutro:#9AA19D; --g-evitar:#F0565B; --g-nunca:#FF8A8D; --g-x:#6E7572;
+  --f-display:"Barlow Condensed",ui-sans-serif,system-ui,sans-serif; --f-num:"Barlow Condensed",ui-sans-serif,sans-serif;
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 10px 24px -14px rgba(0,0,0,.7);
+  --r:10px; --r-chip:999px; --h-weight:800; --h-transform:uppercase; --h-track:.02em;
+  color-scheme:dark;
+}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;margin:0;-webkit-font-smoothing:antialiased}
@@ -37,20 +38,23 @@ button{cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
 [hidden]{display:none!important}
 .num{font-variant-numeric:tabular-nums}
-h1,h2,h3{margin:0;font-family:var(--f-display);letter-spacing:.01em;text-wrap:balance}
+h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:var(--h-weight);text-transform:var(--h-transform);letter-spacing:var(--h-track);text-wrap:balance}
+::selection{background:var(--accent);color:var(--accent-ink)}
+input,textarea{caret-color:var(--mark)}
+input[type=checkbox]{accent-color:var(--accent)}
 
 main{max-width:560px;margin:0 auto;padding-block:20px calc(96px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
-.top .eyebrow{font-size:13px;color:var(--muted)}
-.top h1{font-size:34px;font-weight:800;line-height:1;margin-top:4px;text-transform:uppercase}
+.top h1{font-size:40px;line-height:1}
+.top .meta{font-size:13px;color:var(--muted);margin-top:6px}
 .top p{margin:6px 0 0;color:var(--muted)}
 
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);min-width:0}
-.card h2{font-size:21px;font-weight:700;text-transform:uppercase}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);min-width:0}
+.card h2{font-size:24px;line-height:1.1}
 .card-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
 .note{font-size:13px;color:var(--muted)}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 14px;font-weight:600;font-size:14px;min-height:44px;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:10px 14px;font-weight:600;font-size:14px;min-height:44px;text-decoration:none}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn.ghost{border-color:transparent;background:transparent;color:var(--accent);padding-inline:6px}
 .btn.danger{color:var(--bad);border-color:var(--bad-soft)}
@@ -60,23 +64,26 @@ main{max-width:560px;margin:0 auto;padding-block:20px calc(96px + env(safe-area-
 .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.info{background:var(--accent-soft);color:var(--accent)}
 
-.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:7px 12px;font-size:14px;min-height:36px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);border-radius:var(--r-chip);padding:7px 12px;font-size:14px;min-height:36px}
 .chip i{width:9px;height:9px;border-radius:50%;background:var(--c,var(--g-x));flex:none}
 .chip.on{background:color-mix(in srgb,var(--c) 16%,var(--surface));border-color:var(--c)}
+.chip.off{opacity:.42;border-style:dashed}
 .chip .x{margin-left:2px;color:var(--faint);font-weight:700}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 
-.meal{display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px}
-.meal .hora{font-family:var(--f-display);font-size:26px;font-weight:700;line-height:1}
+.meal{display:flex;flex-direction:column;gap:6px}
+.meal-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.meal-h .pill{margin-left:auto;align-self:center}
+.meal .hora{font-family:var(--f-num);font-size:30px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums lining-nums}
 .meal .tipo{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
-.meal h3{font-size:19px;text-transform:uppercase}
+
 .meal .ideia{font-size:13px;color:var(--muted);margin:2px 0 8px}
 .prob{margin:8px 0 0;padding-left:18px;color:var(--bad);font-size:13px}
 .sep{text-align:center;font-size:12px;color:var(--faint);margin:-4px 0}
 
 .verdict{border-radius:14px;padding:14px;display:flex;gap:12px;align-items:flex-start}
 .verdict.ok{background:var(--ok-soft)} .verdict.bad{background:var(--bad-soft)} .verdict.vazio{background:var(--surface-2)}
-.verdict b{display:block;font-family:var(--f-display);font-size:22px;text-transform:uppercase;line-height:1.1}
+.verdict b{display:block;font-family:var(--f-display);font-weight:var(--h-weight);text-transform:var(--h-transform);font-size:26px;line-height:1.05}
 .verdict.ok b{color:var(--ok)} .verdict.bad b{color:var(--bad)}
 .verdict ul{margin:6px 0 0;padding-left:18px}
 
@@ -95,11 +102,11 @@ main{max-width:560px;margin:0 auto;padding-block:20px calc(96px + env(safe-area-
 .days button{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;min-width:44px;min-height:40px;font-weight:600;font-size:13px;color:var(--muted)}
 .days button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 
-.big{font-family:var(--f-display);font-size:44px;font-weight:800;line-height:1}
+.big{font-family:var(--f-num);font-size:46px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums lining-nums}
 .big small{font-size:18px;color:var(--muted);font-weight:600}
 .estado{border-radius:14px;padding:14px}
 .estado.dentro,.estado.confortavel{background:var(--ok-soft)} .estado.exigente{background:var(--warn-soft)} .estado.arriscado,.estado.passou{background:var(--bad-soft)}
-.estado b{font-family:var(--f-display);font-size:22px;text-transform:uppercase}
+.estado b{font-family:var(--f-display);font-weight:var(--h-weight);text-transform:var(--h-transform);font-size:26px}
 .spark svg{width:100%;height:auto;display:block}
 .spark text{fill:var(--muted);font-size:10px;font-family:var(--f-body)}
 table.grupos{width:100%;border-collapse:collapse;font-size:14px}
@@ -115,10 +122,40 @@ table.grupos td:first-child{width:28px}
 .sheet-bg{position:fixed;inset:0;background:rgba(10,12,16,.5);z-index:40;display:flex;align-items:flex-end;justify-content:center}
 .sheet{background:var(--bg);width:min(560px,100%);max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
 .sheet-h{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-16px;background:var(--bg);padding-block:4px}
-.sheet-h h2{font-size:22px;text-transform:uppercase}
+.sheet-h h2{font-size:26px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;z-index:60;max-width:calc(100% - 32px)}
-.logo{width:40px;height:40px;border-radius:11px;flex:none}
+.logo{width:44px;height:44px;border-radius:10px;flex:none}
 .hero{display:flex;gap:12px;align-items:center}
+
+/* ---- assinatura "parede": cada refeição é um retrato emoldurado, com passe-partout e legenda ---- */
+:root:not([data-estilo="placar"]) .meal{border:1px solid var(--frame);box-shadow:inset 0 0 0 6px var(--surface),inset 0 0 0 7px var(--line),var(--shadow);padding:20px 18px}
+:root:not([data-estilo="placar"]) .meal .tipo{font-family:var(--f-display);font-style:italic;font-size:18px;text-transform:none;letter-spacing:0;color:var(--ink);font-weight:600}
+:root:not([data-estilo="placar"]) .legenda{font-family:var(--f-display);font-style:italic;font-size:16px;color:var(--muted);border-top:1px solid var(--line);margin-top:12px;padding-top:8px}
+:root:not([data-estilo="placar"]) .top h1{font-size:44px;font-weight:700}
+:root:not([data-estilo="placar"]) .top .regua{height:3px;width:56px;background:var(--mark);margin-top:10px}
+:root:not([data-estilo="placar"]) .pill{border-radius:2px;font-family:var(--f-body)}
+:root:not([data-estilo="placar"]) .tabs a[aria-current="page"]{color:var(--mark)}
+:root:not([data-estilo="placar"]) .placar{display:none}
+
+/* ---- assinatura "placar": o dia num placar de campeonato, punições anotadas como as do árbitro ---- */
+:root[data-estilo="placar"] .regua,:root[data-estilo="placar"] .legenda{display:none}
+.placar{background:#050607;border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:6px 10px;align-items:end;color:var(--ink)}
+.placar .col{display:flex;flex-direction:column;gap:2px;min-width:0}
+.placar .lb{font-family:var(--f-num);font-weight:700;font-size:13px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.placar .hh{font-family:var(--f-num);font-weight:800;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.placar .lamp{height:6px;border-radius:2px;background:var(--line);margin-top:4px}
+.placar .lamp.segue{background:var(--ok);box-shadow:0 0 12px -2px var(--ok)}
+.placar .lamp.quebra{background:var(--bad);box-shadow:0 0 12px -2px var(--bad)}
+.placar .pun{border-left:1px solid var(--line);padding-left:10px;text-align:center}
+.placar .pun .hh{color:var(--bad)}
+.placar .pun.zero .hh{color:var(--ok)}
+.placar .rodape{grid-column:1/-1;display:flex;justify-content:space-between;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
+:root[data-estilo="placar"] .prob li::marker{content:"P  ";font-family:var(--f-num);font-weight:800;color:var(--bad)}
+:root[data-estilo="placar"] .meal .tipo{font-family:var(--f-num);font-size:16px;letter-spacing:.08em;color:var(--ink)}
+
+.academia{width:44px;height:44px;object-fit:contain;border-radius:6px;background:var(--surface);border:1px solid var(--line);padding:3px;flex:none}
+.cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+@media (prefers-reduced-motion:no-preference){.placar .lamp{transition:background .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1)}}
 </style>
 <main id="main" aria-live="polite"></main>
 <nav class="tabs" id="tabs" aria-label="Secções"></nav>
@@ -268,7 +305,26 @@ const REFEICOES = [{ tipo: "C", nome: "Refeição doce", ideia: "Fruta doce, que
   { tipo: "A", nome: "Refeição cozinhada", ideia: "Proteína, legumes e azeite com um só amido (arroz, batata ou massa)." },
   { tipo: "A", nome: "Refeição cozinhada", ideia: "Proteína, legumes e azeite com um só amido." }];
 
-raiz.TatameRegras = { grupo, familiaAmido, problemas, normalizar, GRUPOS, REFEICOES, horasValidas, horasSugeridas, avisosTreino, minutos, hm, INTERVALO_MIN };
+
+// ---------------------------------------------------------------- o que entra em cada refeição
+// Refeição doce: fruta doce e queijo fresco (C) com um amido sem gordura (B). Cozinhada: A com um só amido (B).
+const GRUPOS_REFEICAO = { C: ["C", "B", "neutro"], A: ["A", "B", "neutro"] };
+const NOME_TIPO = { C: "refeição doce", A: "refeição cozinhada" };
+const NOMES_GRUPO = { A: "cozinhados", B: "amidos", C: "fruta doce e queijo fresco", D: "fruta ácida", E: "banana crua", F: "leite", coalhado: "iogurte e kefir", neutro: "neutros", evitar: "a evitar", nunca: "fora do método" };
+
+/** Pode `nome` entrar numa refeição do `tipo` ("C" ou "A") que já tem `atuais`? {ok, motivo}. */
+function podeEntrar(nome, tipo, atuais = []) {
+  const g = grupo(nome);
+  if (atuais.includes(nome)) return { ok: true };
+  if (!g) return { ok: false, motivo: `Não reconheço "${nome}".` };
+  if (!(GRUPOS_REFEICAO[tipo] || []).includes(g)) return { ok: false, motivo: `${nome} é de ${NOMES_GRUPO[g]}: não entra na ${NOME_TIPO[tipo]}.` };
+  if (tipo === "C" && g === "B" && texto(nome).includes("frit")) return { ok: false, motivo: "Na refeição doce o amido não pode ser frito." };
+  const antes = problemas(atuais).length, depois = problemas([...atuais, nome]);
+  if (depois.length > antes) return { ok: false, motivo: depois[depois.length - 1][0].toUpperCase() + depois[depois.length - 1].slice(1) + "." };
+  return { ok: true };
+}
+
+raiz.TatameRegras = { podeEntrar, GRUPOS_REFEICAO, grupo, familiaAmido, problemas, normalizar, GRUPOS, REFEICOES, horasValidas, horasSugeridas, avisosTreino, minutos, hm, INTERVALO_MIN };
 })(typeof window !== "undefined" ? window : globalThis);
 </script>
 <script>
@@ -419,12 +475,13 @@ let vista = "hoje";
 let juntar = [];           // alimentos escolhidos no "posso juntar?"
 let alvoPicker = null;     // índice da refeição a registar, ou null
 
-function topo(titulo, sub, eyebrow) {
-  return `<header class="top"><div class="eyebrow">${eyebrow || esc(fmtDia(hoje()))}</div><h1>${titulo}</h1>${sub ? `<p>${sub}</p>` : ""}</header>`;
+function topo(titulo, sub, extra = "") {
+  return `<header class="top cab"><div style="min-width:0"><h1>${titulo}</h1><div class="meta">${esc(fmtDia(hoje()))}</div>${sub ? `<p>${sub}</p>` : ""}<div class="regua"></div></div>${extra}</header>`;
 }
+const logoAcademia = () => (D.logoAcademia ? `<img class="academia" src="${esc(D.logoAcademia)}" alt="Logo da academia">` : "");
 function chip(nome, opts = {}) {
   const g = R.grupo(nome);
-  return `<button class="chip ${opts.on ? "on" : ""}" style="--c:${corGrupo(g)}" data-act="${opts.act}" data-nome="${esc(nome)}" ${opts.i != null ? `data-i="${opts.i}"` : ""} aria-pressed="${!!opts.on}" title="${esc(NOME_GRUPO[g])}"><i></i>${esc(nome)}${opts.x ? '<span class="x" aria-hidden="true">×</span>' : ""}</button>`;
+  return `<button class="chip ${opts.on ? "on" : ""} ${opts.off ? "off" : ""}" style="--c:${corGrupo(g)}" data-act="${opts.act}" data-nome="${esc(nome)}" ${opts.off ? `data-motivo="${esc(opts.off)}" aria-disabled="true"` : ""} ${opts.i != null ? `data-i="${opts.i}"` : ""} aria-pressed="${!!opts.on}" title="${esc(NOME_GRUPO[g])}"><i></i>${esc(nome)}${opts.x ? '<span class="x" aria-hidden="true">×</span>' : ""}</button>`;
 }
 function veredito(nomes) {
   if (!nomes.length) return `<div class="verdict vazio"><div><b>Escolhe os alimentos</b><span class="note">Toca nos alimentos da refeição. O veredito aparece aqui.</span></div></div>`;
@@ -437,7 +494,13 @@ function viewHoje() {
   const d = hoje(), t = treinoDe(d), h = horas(), regs = refeicoesDe(d);
   const avisos = t ? R.avisosTreino(h, t.hora, t.duracao) : [];
   const seq = sequencia();
-  let html = topo(`Olá${D.perfil.nome ? ", " + esc(D.perfil.nome.split(" ")[0]) : ""}`, t ? `Treino hoje às <b>${esc(t.hora)}</b> (${t.duracao} min).` : "Hoje não tens treino marcado.");
+  let html = topo(`Olá${D.perfil.nome ? ", " + esc(D.perfil.nome.split(" ")[0]) : ""}`, t ? `Treino hoje às <b>${esc(t.hora)}</b> (${t.duracao} min).` : "Hoje não tens treino marcado.", logoAcademia());
+  const puns = h.reduce((a, _, i) => a + R.problemas(regs[i] || []).length, 0);
+  html += `<section class="placar" aria-label="Placar do dia"><div class="col"><span class="lb">Doce</span><span class="hh">${esc(h[0])}</span><span class="lamp ${estadoRefeicao(regs[0] || [])}"></span></div>
+    <div class="col"><span class="lb">Cozinhada</span><span class="hh">${esc(h[1])}</span><span class="lamp ${estadoRefeicao(regs[1] || [])}"></span></div>
+    <div class="col"><span class="lb">Cozinhada</span><span class="hh">${esc(h[2])}</span><span class="lamp ${estadoRefeicao(regs[2] || [])}"></span></div>
+    <div class="col pun ${puns ? "" : "zero"}"><span class="lb">Punições</span><span class="hh">${puns}</span></div>
+    <div class="rodape"><span>${t ? `Treino ${esc(t.hora)}` : "Sem treino hoje"}</span><span>Sequência ${seq} ${seq === 1 ? "dia" : "dias"}</span></div></section>`;
   if (D.competidor.ativo) {
     const p = planoComp();
     if (p) html += `<a class="card" href="#competir" style="text-decoration:none;color:inherit"><div class="card-h"><h2>Rumo ao ${esc(p.categoria.nome)}</h2><span class="pill ${p.estado === "dentro" || p.estado === "confortavel" ? "ok" : p.estado === "exigente" ? "warn" : "bad"}">${esc(ESTADO[p.estado].curto)}</span></div><div class="note num">${p.estado === "dentro" ? `Estás dentro da categoria${p.folga != null ? `, com ${kg(p.folga)} kg de folga` : ""}.` : `Faltam ${kg(p.falta)} kg${p.dias != null && p.dias > 0 ? ` em ${p.dias} dias` : ""}.`}</div></a>`;
@@ -446,27 +509,30 @@ function viewHoje() {
     const r = R.REFEICOES[i], nomes = regs[i] || [], est = estadoRefeicao(nomes), p = R.problemas(nomes);
     const av = avisos.filter(a => a.refeicao === i);
     if (i > 0) html += `<div class="sep">Entre refeições: só água ou água de coco</div>`;
-    html += `<section class="card meal"><div><div class="hora num">${esc(hora)}</div></div><div style="min-width:0">
-      <div class="row" style="justify-content:space-between"><div class="tipo">${esc(r.nome)}</div><span class="pill ${est === "segue" ? "ok" : est === "quebra" ? "bad" : ""}">${est === "segue" ? "Segue o método" : est === "quebra" ? "Quebra" : "Por registar"}</span></div>
+    html += `<section class="card meal"><div class="meal-h"><span class="hora num">${esc(hora)}</span><span class="tipo">${esc(r.nome)}</span><span class="pill ${est === "segue" ? "ok" : est === "quebra" ? "bad" : ""}">${est === "segue" ? "Segue o método" : est === "quebra" ? "Quebra" : "Por registar"}</span></div><div style="min-width:0">
       <p class="ideia">${esc(r.ideia)}</p>
       ${nomes.length ? `<div class="chips">${nomes.map(n => chip(n, { act: "tirar", i, x: true })).join("")}</div>` : ""}
       ${p.length ? `<ul class="prob">${p.map(x => `<li>${esc(x[0].toUpperCase() + x.slice(1))}</li>`).join("")}</ul>` : ""}
       ${av.map(a => `<p class="note" style="color:var(--warn);margin:8px 0 0">${esc(a.texto)}</p>`).join("")}
       <button class="btn ghost" data-act="registar" data-i="${i}" style="margin-top:6px">+ Registar alimento</button>
+      <div class="legenda">${est === "segue" ? "Segue o método." : est === "quebra" ? `${p.length} ${p.length === 1 ? "regra quebrada" : "regras quebradas"}.` : `${esc(r.nome)}, às ${esc(hora)}.`}</div>
     </div></section>`;
   });
   html += `<section class="card"><div class="card-h"><h2>Sequência</h2><span class="big num">${seq}<small> ${seq === 1 ? "dia" : "dias"}</small></span></div><p class="note" style="margin:0">Dias seguidos com as 3 refeições registadas e todas dentro do método.</p></section>`;
   return html;
 }
 
-function picker(selecionados, act) {
+function picker(selecionados, act, tipo) {
   const sel = new Set(selecionados);
+  // numa refeição: só os grupos que entram nela; o que quebraria a combinação aparece bloqueado, com o porquê
+  const cats = CATALOGO.map(([cat, lista]) => [cat, tipo ? lista.filter(n => (R.GRUPOS_REFEICAO[tipo] || []).includes(R.grupo(n))) : lista]).filter(([, l]) => l.length);
+  const item = n => { if (!tipo) return chip(n, { act, on: sel.has(n) }); const v = R.podeEntrar(n, tipo, selecionados); return v.ok ? chip(n, { act, on: sel.has(n) }) : chip(n, { act: "bloqueado", off: v.motivo }); };
   return `<div class="field"><label for="pk-busca">Procurar ou escrever outro alimento</label><div class="row" style="flex-wrap:nowrap"><input id="pk-busca" placeholder="ex.: frango, arroz, melão" autocomplete="off"><button class="btn" data-act="pk-outro" data-alvo="${act}">Juntar</button></div></div>
-    <div id="pk-lista">${CATALOGO.map(([cat, lista]) => `<div class="grupo-cat" data-cat><h3>${esc(cat)}</h3><div class="chips">${lista.map(n => chip(n, { act, on: sel.has(n) })).join("")}</div></div>`).join("")}</div>`;
+    <div id="pk-lista">${cats.map(([cat, lista]) => `<div class="grupo-cat" data-cat><h3>${esc(cat)}</h3><div class="chips">${lista.map(item).join("")}</div></div>`).join("")}</div>`;
 }
 
 function viewJuntar() {
-  return topo("Posso juntar?", "Escolhe o que vais pôr no prato. O Tatame diz se a combinação segue o método.", "Verificador")
+  return topo("Posso juntar?", "Escolhe o que vais pôr no prato. O app diz se a combinação segue o método.")
     + `<section class="card" style="position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:5">${veredito(juntar)}${juntar.length ? `<div class="chips" style="margin-top:10px">${juntar.map(n => chip(n, { act: "j-tirar", x: true })).join("")}</div><button class="btn ghost" data-act="j-limpar" style="margin-top:6px">Limpar</button>` : ""}</section>`
     + `<section class="card">${picker(juntar, "j-pick")}</section>`;
 }
@@ -485,8 +551,8 @@ function planoComp() {
 }
 function viewCompetir() {
   const c = D.competidor;
-  let html = topo("Competir", "Categorias de peso de adulto da IBJJF e o caminho até ao peso, sem cortes de água.", "Modo competidor");
-  if (!c.ativo) return html + `<section class="card"><p style="margin-top:0">Vais competir? Diz a categoria e a data e o Tatame mostra quanto falta e se o ritmo é seguro.</p><button class="btn primary full" data-act="comp-on">Sou competidor</button></section>`;
+  let html = topo("Competir", "Categorias de peso de adulto da IBJJF e o caminho até ao peso, sem cortes de água.");
+  if (!c.ativo) return html + `<section class="card"><p style="margin-top:0">Vais competir? Diz a categoria e a data e o app mostra quanto falta e se o ritmo é seguro.</p><button class="btn primary full" data-act="comp-on">Sou competidor</button></section>`;
   const cats = K.categorias(c.modalidade, c.sexo);
   const p = planoComp(), peso = pesoAtual();
   html += `<section class="card"><div class="fgrid">
@@ -532,17 +598,19 @@ function grafico() {
 }
 
 function viewMetodo() {
-  return topo("O método", "As regras do livro de Rorion Gracie, <i>The Gracie Diet</i> (2010), com a tabela de grupos de Carlos Gracie.", "Como funciona")
+  return topo("O método", "As regras do livro de Rorion Gracie, <i>The Gracie Diet</i> (2010), com a tabela de grupos de Carlos Gracie.")
     + `<section class="card"><div class="card-h"><h2>As 3 regras do dia</h2></div><ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
       <li><b>3 refeições</b>, com pelo menos <b>4 h 30</b> entre elas.</li><li>Entre refeições, <b>só água ou água de coco</b>.</li><li>Em cada refeição, só se juntam grupos que <b>combinam</b>.</li></ol></section>`
     + `<section class="card"><div class="card-h"><h2>Os grupos</h2></div><table class="grupos"><tbody>${R.GRUPOS.map(g => `<tr><td><span class="gdot" style="--c:${corGrupo(g.grupo)}">${g.grupo.length === 1 ? g.grupo : g.grupo === "neutro" ? "N" : "×"}</span></td><td><b>${esc(g.nome)}</b><br>${esc(g.regra)}<div class="note">${esc(g.exemplos)}</div></td></tr>`).join("")}</tbody></table></section>`
-    + `<section class="card"><div class="card-h"><h2>Com honestidade</h2></div><p style="margin-top:0">O livro explica as regras com a digestão e a acidez do sangue. Isso não tem suporte científico: o intestino digere misturas sem problema. O Tatame ajuda a seguir o método, não promete resultados de saúde.</p><p class="note" style="margin-bottom:0">Comida simples, sem álcool, doces nem refrigerantes, a horas certas, faz bem em qualquer dieta. Para competir, o que pesa é o total do que comes e o tempo até à pesagem.</p></section>`;
+    + `<section class="card"><div class="card-h"><h2>Com honestidade</h2></div><p style="margin-top:0">O livro explica as regras com a digestão e a acidez do sangue. Isso não tem suporte científico: o intestino digere misturas sem problema. O Gracie Diet ajuda a seguir o método, não promete resultados de saúde.</p><p class="note" style="margin-bottom:0">Comida simples, sem álcool, doces nem refrigerantes, a horas certas, faz bem em qualquer dieta. Para competir, o que pesa é o total do que comes e o tempo até à pesagem.</p></section>`;
 }
 
 function viewPerfil() {
   const p = D.perfil, t = p.treino || { dias: [], hora: "", duracao: 90 }, h = horas();
-  return topo("Perfil", "Os dados ficam só neste telemóvel.", "Tu e o teu treino")
-    + `<section class="card"><form id="f-perfil" class="fgrid">
+  return topo("Perfil", "Os dados ficam só neste telemóvel.")
+    + `<section class="card"><div class="card-h"><h2>Estilo</h2></div>
+      <div class="seg" role="group" aria-label="Estilo"><button data-act="estilo" data-v="parede" aria-pressed="${estilo() === "parede"}">Parede da academia</button><button data-act="estilo" data-v="placar" aria-pressed="${estilo() === "placar"}">Placar</button></div></section>
+    <section class="card"><form id="f-perfil" class="fgrid">
       <div class="field full"><label for="pf-nome">Nome</label><input id="pf-nome" value="${esc(p.nome || "")}" autocomplete="given-name"></div>
       <div class="field"><label for="pf-peso">Peso (kg)</label><input id="pf-peso" type="number" inputmode="decimal" step="0.1" value="${esc(pesoAtual() || "")}"></div>
       <div class="field"><label for="pf-faixa">Faixa</label><select id="pf-faixa">${FAIXAS.map(f => `<option ${f === p.faixa ? "selected" : ""}>${f}</option>`).join("")}</select></div>
@@ -553,6 +621,9 @@ function viewPerfil() {
         <button type="button" class="btn ghost" data-act="pf-sugerir">Sugerir pelas horas do treino</button></div>
       <button class="btn primary full" type="submit">Guardar</button>
     </form></section>
+    <section class="card"><div class="card-h"><h2>Logo da tua academia</h2>${logoAcademia()}</div>
+      <p class="note" style="margin-top:0">Opcional. Aparece no ecrã Hoje. Usa só uma logo que a academia te deixa usar.</p>
+      <div class="row"><label class="btn" for="logo-arq">${D.logoAcademia ? "Trocar logo" : "Escolher imagem"}</label><input id="logo-arq" type="file" accept="image/*" hidden data-change="logo">${D.logoAcademia ? '<button class="btn ghost" data-act="logo-tirar">Tirar logo</button>' : ""}</div></section>
     <section class="card"><div class="card-h"><h2>Cópia dos dados</h2></div><p class="note" style="margin-top:0">Guarda uma cópia para passar para outro telemóvel ou não perder nada.</p>
       <div class="row"><button class="btn" data-act="exportar">Copiar os meus dados</button><label class="btn" for="imp-arq">Importar ficheiro</label><input id="imp-arq" type="file" accept="application/json,.json,.txt" hidden data-change="importar"></div>
       <textarea id="exp-txt" readonly hidden style="width:100%;min-height:90px;margin-top:10px;font-size:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);padding:8px"></textarea></section>
@@ -560,7 +631,7 @@ function viewPerfil() {
 }
 
 function viewInicio() {
-  return `<header class="top hero">${LOGO}<div><div class="eyebrow">Alimentação para o jiu-jitsu</div><h1>Tatame</h1></div></header>
+  return `<header class="top hero">${LOGO}<div><h1>Gracie Diet</h1><div class="meta">Alimentação para o jiu-jitsu · app não oficial</div></div></header>
     <section class="card"><p style="margin-top:0">O método de alimentação da família Gracie no teu telemóvel: o que podes juntar no prato, as 3 refeições à volta do treino e, se competes, o caminho até à categoria.</p>
     <form id="f-inicio" class="fgrid">
       <div class="field full"><label for="in-nome">Como te chamas?</label><input id="in-nome" autocomplete="given-name" required></div>
@@ -570,7 +641,7 @@ function viewInicio() {
       <label class="full row" style="gap:10px"><input type="checkbox" id="in-comp" style="width:22px;height:22px"> Vou competir</label>
       <button class="btn primary full" type="submit">Começar</button>
     </form></section>
-    <p class="note">Os teus dados ficam só neste telemóvel. Baseado em <i>The Gracie Diet</i>, de Rorion Gracie (2010). App independente.</p>`;
+    <p class="note">Os teus dados ficam só neste telemóvel. App não oficial, baseado no livro <i>The Gracie Diet</i>, de Rorion Gracie (2010). Sem ligação à família Gracie nem a academias.</p>`;
 }
 
 const LOGO = `<svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="var(--ink)"/><circle cx="32" cy="32" r="19" fill="var(--surface)"/><path d="M32 32 L32 13 A19 19 0 0 1 48.5 41.5 Z" fill="var(--g-A)"/><path d="M32 32 L48.5 41.5 A19 19 0 0 1 15.5 41.5 Z" fill="var(--g-B)"/><path d="M32 32 L15.5 41.5 A19 19 0 0 1 32 13 Z" fill="var(--g-C)"/><circle cx="32" cy="32" r="19" fill="none" stroke="var(--surface)" stroke-width="3"/><path d="M32 13V32L48.5 41.5M32 32L15.5 41.5" stroke="var(--surface)" stroke-width="3"/></svg>`;
@@ -579,12 +650,14 @@ const LOGO = `<svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect wid
 function abrirRegisto(i) {
   alvoPicker = i;
   const r = R.REFEICOES[i];
-  $("#sheet-root").innerHTML = `<div class="sheet-bg" data-act="fechar"><div class="sheet" role="dialog" aria-modal="true" aria-label="Registar na ${esc(r.nome)}"><div class="sheet-h"><h2>${esc(r.nome)} · ${esc(horas()[i])}</h2><button class="btn" data-act="fechar-btn">Feito</button></div><div id="sheet-ver">${veredito(refeicoesDe(hoje())[i] || [])}</div>${picker(refeicoesDe(hoje())[i] || [], "r-pick")}</div></div>`;
+  $("#sheet-root").innerHTML = `<div class="sheet-bg" data-act="fechar"><div class="sheet" role="dialog" aria-modal="true" aria-label="Registar na ${esc(r.nome)}"><div class="sheet-h"><h2>${esc(r.nome)} · ${esc(horas()[i])}</h2><button class="btn" data-act="fechar-btn">Feito</button></div><div id="sheet-ver">${veredito(refeicoesDe(hoje())[i] || [])}</div><p class="note" style="margin:0">Aqui só aparecem os grupos que entram na ${i === 0 ? "refeição doce" : "refeição cozinhada"}. O que quebraria a combinação fica bloqueado.</p><div id="sheet-pk">${picker(refeicoesDe(hoje())[i] || [], "r-pick", r.tipo)}</div></div></div>`;
 }
 function atualizarSheet() {
   const nomes = refeicoesDe(hoje())[alvoPicker] || [];
   $("#sheet-ver").innerHTML = veredito(nomes);
-  document.querySelectorAll('#sheet-root [data-act="r-pick"]').forEach(b => { const on = nomes.includes(b.dataset.nome); b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+  const busca = $("#pk-busca") ? $("#pk-busca").value : "";
+  $("#sheet-pk").innerHTML = picker(nomes, "r-pick", R.REFEICOES[alvoPicker].tipo);
+  if (busca) { $("#pk-busca").value = busca; $("#pk-busca").dispatchEvent(new Event("input", { bubbles: true })); }
 }
 function fecharSheet() { alvoPicker = null; $("#sheet-root").innerHTML = ""; render(); }
 function alternarRegisto(nome) {
@@ -594,7 +667,10 @@ function alternarRegisto(nome) {
 }
 
 /* ---------- render ---------- */
+const estilo = () => D.estilo || "parede";
 function render() {
+  document.documentElement.dataset.estilo = estilo();
+  const tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.content = estilo() === "placar" ? "#0E1011" : "#ECE5D6";
   if (!D.perfil) { $("#tabs").hidden = true; $("#main").innerHTML = viewInicio(); return; }
   $("#tabs").hidden = false;
   $("#tabs").innerHTML = VIEWS.map(([id, nome]) => `<a href="#${id}" ${vista === id ? 'aria-current="page"' : ""}>${svg(id)}${nome === "Posso juntar?" ? "Juntar" : nome}</a>`).join("");
@@ -614,11 +690,14 @@ document.addEventListener("click", e => {
     case "fechar-btn": fecharSheet(); break;
     case "registar": abrirRegisto(+el.dataset.i); break;
     case "r-pick": alternarRegisto(el.dataset.nome); break;
+    case "bloqueado": toast(el.dataset.motivo); break;
+    case "estilo": D.estilo = el.dataset.v; gravar(); render(); break;
+    case "logo-tirar": delete D.logoAcademia; gravar(); render(); break;
     case "tirar": { const d = hoje(); const regs = D.registos[d] = refeicoesDe(d).map(x => [...x]); regs[+el.dataset.i] = regs[+el.dataset.i].filter(n => n !== el.dataset.nome); gravar(); render(); break; }
     case "j-pick": { const n = el.dataset.nome; juntar = juntar.includes(n) ? juntar.filter(x => x !== n) : [...juntar, n]; render(); break; }
     case "j-tirar": juntar = juntar.filter(x => x !== el.dataset.nome); render(); break;
     case "j-limpar": juntar = []; render(); break;
-    case "pk-outro": { const v = ($("#pk-busca").value || "").trim(); if (!v) return; if (el.dataset.alvo === "r-pick") alternarRegisto(v); else { if (!juntar.includes(v)) juntar = [...juntar, v]; render(); } if (!R.grupo(v)) toast(`Não reconheço "${v}": não conta nas regras.`); break; }
+    case "pk-outro": { const v = ($("#pk-busca").value || "").trim(); if (!v) return; if (el.dataset.alvo === "r-pick") { const ok = R.podeEntrar(v, R.REFEICOES[alvoPicker].tipo, refeicoesDe(hoje())[alvoPicker] || []); if (!ok.ok) { toast(ok.motivo); return; } alternarRegisto(v); $("#pk-busca").value = ""; return; } else { if (!juntar.includes(v)) juntar = [...juntar, v]; render(); } if (!R.grupo(v)) toast(`Não reconheço "${v}": não conta nas regras.`); break; }
     case "in-dia": case "pf-dia": el.setAttribute("aria-pressed", el.getAttribute("aria-pressed") !== "true"); break;
     case "pf-sugerir": { const s = R.horasSugeridas($("#pf-hora").value || null, +$("#pf-dur").value || 90); s.forEach((x, i) => ($(`#pf-h${i}`).value = x)); toast("Horas sugeridas. Toca em Guardar."); break; }
     case "comp-on": ativarCompetidor(); gravar(); render(); break;
@@ -645,9 +724,19 @@ document.addEventListener("change", e => {
   if (k === "comp-cat") D.competidor.categoria = +e.target.value;
   if (k === "comp-data") D.competidor.data = e.target.value;
   if (k === "comp-kim") D.competidor.kimono = Math.min(3.5, Math.max(0.8, +e.target.value || 1.8));
+  if (k === "logo") {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    // reduz para 256 px: a logo vive no armazenamento do telemóvel, que é pequeno
+    const img = new Image(); const url = URL.createObjectURL(f);
+    img.onload = () => { const lado = 256, esc2 = Math.min(1, lado / Math.max(img.width, img.height)); const c = document.createElement("canvas");
+      c.width = Math.round(img.width * esc2); c.height = Math.round(img.height * esc2); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      D.logoAcademia = c.toDataURL("image/png"); URL.revokeObjectURL(url); gravar(); toast("Logo guardada."); render(); };
+    img.onerror = () => toast("Não consegui ler essa imagem.");
+    img.src = url; return;
+  }
   if (k === "importar") {
     const f = e.target.files && e.target.files[0]; if (!f) return;
-    f.text().then(t => { const novo = JSON.parse(t); if (!novo || typeof novo !== "object" || !("registos" in novo)) throw new Error(); D = novo; gravar(); toast("Dados importados."); render(); }).catch(() => toast("Esse ficheiro não é uma cópia do Tatame."));
+    f.text().then(t => { const novo = JSON.parse(t); if (!novo || typeof novo !== "object" || !("registos" in novo)) throw new Error(); D = novo; gravar(); toast("Dados importados."); render(); }).catch(() => toast("Esse ficheiro não é uma cópia do Gracie Diet."));
     return;
   }
   gravar(); render();
